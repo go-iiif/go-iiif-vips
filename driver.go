@@ -18,7 +18,7 @@ func init() {
 		panic(err)
 	}
 
-	iiifdriver.RegisterDriver("native", dr)
+	iiifdriver.RegisterDriver("vips", dr)
 }
 
 type VIPSDriver struct {
