@@ -363,7 +363,11 @@ func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 		return err
 	}
 
-	// FIX ME... common stuff
+	err = iiifimage.ApplyCustomTransformations(t, im)
+
+        if err != nil {
+                return err
+        }
 
 	// see notes in NewVIPSImageFromConfigWithSource
 

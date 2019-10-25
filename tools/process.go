@@ -1,7 +1,6 @@
 package tools
 
-// ./bin/iiif-process -config config.json -instructions instructions.json -uri avocado.png
-// {"avocado.png":{"b":"avocado.png/full/!2048,1536/0/color.jpg","d":"avocado.png/-1,-1,320,320/full/0/dither.jpg","o":"avocado.png/full/full/-1/color.jpg"}}
+// THIS FILE WILL BE REMOVED ONCE IT IS PART OF go-iiif PROPER
 
 import (
 	"context"
