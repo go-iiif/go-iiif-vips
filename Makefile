@@ -9,7 +9,7 @@ docker-build:
 	@make docker-server-build
 
 docker-process-build:
-	docker build -f Dockerfile.process -t go-iiif-process .
+	docker build -f Dockerfile.process -t go-iiif-vips-process .
 
 docker-server-build:
-	docker build -f Dockerfile.server -t go-iiif-server .
+	docker build -f Dockerfile.server -t go-iiif-vips-server .

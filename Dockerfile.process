@@ -4,7 +4,7 @@
 
 FROM golang:1.12-alpine as builder
 
-ARG VIPS_VERSION=8.8.2
+ARG VIPS_VERSION=8.8.3
 
 ENV VIPS_DIR=/vips
 ENV PKG_CONFIG_PATH=${VIPS_DIR}/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -31,7 +31,7 @@ RUN wget -O- https://github.com/libvips/libvips/releases/download/v${VIPS_VERSIO
                    --enable-silent-rules \
     && make -s install-strip \
     && cd /go-iiif \
-    && make tools
+    && make cli-tools
 
 FROM alpine
 
