@@ -66,10 +66,14 @@ github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver
 github.com/go-iiif/go-iiif/image
 github.com/go-iiif/go-iiif/source
+github.com/go-iiif/go-iiif/http
+github.com/go-iiif/go-iiif/level
 github.com/go-iiif/go-iiif/process
+github.com/go-iiif/go-iiif/server
+github.com/go-iiif/go-iiif/tile
 github.com/go-iiif/go-iiif/tools
 github.com/go-iiif/go-iiif/aws
-github.com/go-iiif/go-iiif/level
+github.com/go-iiif/go-iiif/profile
 github.com/go-iiif/go-iiif/service
 github.com/go-iiif/go-iiif/compliance
 # github.com/go-iiif/go-iiif-uri v0.0.2
@@ -108,6 +112,8 @@ github.com/gonum/stat
 github.com/google/wire
 # github.com/googleapis/gax-go v2.0.2+incompatible
 github.com/googleapis/gax-go
+# github.com/gorilla/mux v1.7.1
+github.com/gorilla/mux
 # github.com/hashicorp/golang-lru v0.5.1
 github.com/hashicorp/golang-lru/simplelru
 # github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
@@ -124,6 +130,10 @@ github.com/neocortical/noborders
 github.com/nfnt/resize
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 github.com/patrickmn/go-cache
+# github.com/whosonfirst/algnhsa v0.1.0
+github.com/whosonfirst/algnhsa
+# github.com/whosonfirst/go-sanitize v0.1.0
+github.com/whosonfirst/go-sanitize
 # github.com/whosonfirst/go-whosonfirst-aws v0.1.0
 github.com/whosonfirst/go-whosonfirst-aws/s3
 github.com/whosonfirst/go-whosonfirst-aws/session
@@ -131,6 +141,10 @@ github.com/whosonfirst/go-whosonfirst-aws/util
 github.com/whosonfirst/go-whosonfirst-aws/config
 # github.com/whosonfirst/go-whosonfirst-cli v0.1.0
 github.com/whosonfirst/go-whosonfirst-cli/flags
+# github.com/whosonfirst/go-whosonfirst-csv v0.1.0
+github.com/whosonfirst/go-whosonfirst-csv
+# github.com/whosonfirst/go-whosonfirst-log v0.1.0
+github.com/whosonfirst/go-whosonfirst-log
 # github.com/whosonfirst/go-whosonfirst-mimetypes v0.1.0
 github.com/whosonfirst/go-whosonfirst-mimetypes
 github.com/whosonfirst/go-whosonfirst-mimetypes/lookup
