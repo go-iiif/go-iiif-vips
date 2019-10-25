@@ -14,8 +14,6 @@ import (
 	"image"
 	"image/gif"
 	_ "log"
-	"strconv"
-	"strings"
 )
 
 type VIPSImage struct {
@@ -29,7 +27,7 @@ type VIPSImage struct {
 }
 
 type VIPSDimensions struct {
-	Dimensions
+	iiifimage.Dimensions
 	imagesize bimg.ImageSize
 }
 
@@ -51,7 +49,7 @@ pure Go implementation of the Dimensions interface (20160922/thisisaaronland)
 */
 
 type GolangImageDimensions struct {
-	Dimensions
+	iiifimage.Dimensions
 	image image.Image
 }
 
@@ -149,7 +147,7 @@ func (im *VIPSImage) Rename(id string) error {
 	return nil
 }
 
-func (im *VIPSImage) Dimensions() (Dimensions, error) {
+func (im *VIPSImage) Dimensions() (iiifimage.Dimensions, error) {
 
 	// see notes in NewVIPSImageFromConfigWithSource
 	// ideally this never gets triggered but just in case...
@@ -185,7 +183,7 @@ func (im *VIPSImage) Dimensions() (Dimensions, error) {
 
 // https://godoc.org/github.com/h2non/bimg#Options
 
-func (im *VIPSImage) Transform(t *Transformation) error {
+func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
 	// https://godoc.org/github.com/h2non/bimg#Options
 
@@ -365,94 +363,13 @@ func (im *VIPSImage) Transform(t *Transformation) error {
 		return err
 	}
 
-	// None of what follows is part of the IIIF spec so it's not clear
-	// to me yet how to make this in to a sane interface. For the time
-	// being since there is only lipvips we'll just take the opportunity
-	// to think about it... (20160917/thisisaaronland)
-
-	// Also note the way we are diligently setting in `im.isgif` in each
-	// of the features below. That's because this is a bimg/libvips-ism
-	// and we assume that any of these can encode GIFs because pure-Go and
-	// the rest of the code does need to know about it...
-	// (20160922/thisisaaronland)
-
-	if t.Quality == "dither" {
-
-		err = DitherImage(im)
-
-		if err != nil {
-			return err
-		}
-
-		if fi.Format == "gif" {
-			im.isgif = true
-		}
-
-	} else if strings.HasPrefix(t.Quality, "primitive:") {
-
-		parts := strings.Split(t.Quality, ":")
-		parts = strings.Split(parts[1], ",")
-
-		mode, err := strconv.Atoi(parts[0])
-
-		if err != nil {
-			return err
-		}
-
-		iters, err := strconv.Atoi(parts[1])
-
-		if err != nil {
-			return err
-		}
-
-		max_iters := im.config.Primitive.MaxIterations
-
-		if max_iters > 0 && iters > max_iters {
-			return errors.New("Invalid primitive iterations")
-		}
-
-		alpha, err := strconv.Atoi(parts[2])
-
-		if err != nil {
-			return err
-		}
-
-		if alpha > 255 {
-			return errors.New("Invalid primitive alpha")
-		}
-
-		animated := false
-
-		if fi.Format == "gif" {
-			animated = true
-		}
-
-		opts := PrimitiveOptions{
-			Alpha:      alpha,
-			Mode:       mode,
-			Iterations: iters,
-			Size:       0,
-			Animated:   animated,
-		}
-
-		err = PrimitiveImage(im, opts)
-
-		if err != nil {
-			return err
-		}
-
-		if fi.Format == "gif" {
-			im.isgif = true
-		}
-	}
-
-	// END OF none of what follows is part of the IIIF spec
+	// FIX ME... common stuff
 
 	// see notes in NewVIPSImageFromConfigWithSource
 
 	if fi.Format == "gif" && !im.isgif {
 
-		goimg, err := IIIFImageToGolangImage(im)
+		goimg, err := iiifimage.IIIFImageToGolangImage(im)
 
 		if err != nil {
 			return err
@@ -460,7 +377,7 @@ func (im *VIPSImage) Transform(t *Transformation) error {
 
 		im.isgif = true
 
-		err = GolangImageToIIIFImage(goimg, im)
+		err = iiifimage.GolangImageToIIIFImage(goimg, im)
 
 		if err != nil {
 			return err

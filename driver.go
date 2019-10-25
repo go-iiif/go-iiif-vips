@@ -1,15 +1,12 @@
 package vips
 
 import (
-	"bytes"
-	_ "fmt"
 	iiifcache "github.com/go-iiif/go-iiif/cache"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
 	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiifsource "github.com/go-iiif/go-iiif/source"
 	"gopkg.in/h2non/bimg.v1"	
-	"image"
 	_ "log"
 )
 
