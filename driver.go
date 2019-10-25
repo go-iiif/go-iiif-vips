@@ -6,7 +6,7 @@ import (
 	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiifsource "github.com/go-iiif/go-iiif/source"
-	"gopkg.in/h2non/bimg.v1"	
+	"gopkg.in/h2non/bimg.v1"
 	_ "log"
 )
 

@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	tool, err := tools.NewProcessTool()
+	tool, err := tools.NewTransformTool()
 
 	if err != nil {
 		log.Fatal(err)

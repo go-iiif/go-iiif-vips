@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	_ "github.com/go-iiif/go-iiif-vips"
-	"github.com/go-iiif/go-iiif-vips/tools"
 	// "github.com/go-iiif/go-iiif/tools"
+	"github.com/go-iiif/go-iiif-vips/tools"
 	"log"
 )
 
 func main() {
 
-	tool, err := tools.NewProcessTool()
+	tool, err := tools.NewIIIFServerTool()
 
 	if err != nil {
 		log.Fatal(err)

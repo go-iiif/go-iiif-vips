@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
-	iiifimage "github.com/go-iiif/go-iiif/image"	
+	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiifsource "github.com/go-iiif/go-iiif/source"
 	"gopkg.in/h2non/bimg.v1"
 	"image"
@@ -365,9 +365,9 @@ func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
 	err = iiifimage.ApplyCustomTransformations(t, im)
 
-        if err != nil {
-                return err
-        }
+	if err != nil {
+		return err
+	}
 
 	// see notes in NewVIPSImageFromConfigWithSource
 
