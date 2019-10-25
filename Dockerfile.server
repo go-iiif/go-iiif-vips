@@ -31,7 +31,7 @@ RUN wget -O- https://github.com/libvips/libvips/releases/download/v${VIPS_VERSIO
                    --enable-silent-rules \
     && make -s install-strip \
     && cd /go-iiif \
-    && make tools
+    && make cli-tools
 
 FROM alpine
 
