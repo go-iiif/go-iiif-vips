@@ -1,5 +1,23 @@
+# github.com/RobCherry/vibrant v0.0.0-20160903000000-0680b8cf1c899723ebac8f11c6a18d40011098e1
+github.com/RobCherry/vibrant
+# github.com/aaronland/go-aws-session v0.0.3
+github.com/aaronland/go-aws-session
+# github.com/aaronland/go-colours v0.1.0
+github.com/aaronland/go-colours
+github.com/aaronland/go-colours/extruder
+github.com/aaronland/go-colours/grid
+github.com/aaronland/go-colours/palette
 # github.com/aaronland/go-string v0.1.0
 github.com/aaronland/go-string/dsn
+github.com/aaronland/go-string/random
+# github.com/aaronland/gocloud-blob-bucket v0.0.1
+github.com/aaronland/gocloud-blob-bucket
+# github.com/aws/aws-lambda-go v1.13.2
+github.com/aws/aws-lambda-go/events
+github.com/aws/aws-lambda-go/lambda
+github.com/aws/aws-lambda-go/lambda/handlertrace
+github.com/aws/aws-lambda-go/lambda/messages
+github.com/aws/aws-lambda-go/lambdacontext
 # github.com/aws/aws-sdk-go v1.20.6
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/awserr
@@ -7,9 +25,9 @@ github.com/aws/aws-sdk-go/aws/session
 github.com/aws/aws-sdk-go/service/s3
 github.com/aws/aws-sdk-go/service/s3/s3manager
 github.com/aws/aws-sdk-go/aws/credentials
+github.com/aws/aws-sdk-go/aws/client
 github.com/aws/aws-sdk-go/aws/endpoints
 github.com/aws/aws-sdk-go/internal/sdkio
-github.com/aws/aws-sdk-go/aws/client
 github.com/aws/aws-sdk-go/aws/corehandlers
 github.com/aws/aws-sdk-go/aws/credentials/processcreds
 github.com/aws/aws-sdk-go/aws/credentials/stscreds
@@ -42,16 +60,22 @@ github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214000000-673f57e7b1b5ae5bc415b47c76130bab35b08297
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v1.3.3
+# github.com/go-iiif/go-iiif v1.3.4
 github.com/go-iiif/go-iiif/cache
 github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver
 github.com/go-iiif/go-iiif/image
 github.com/go-iiif/go-iiif/source
+github.com/go-iiif/go-iiif/process
 github.com/go-iiif/go-iiif/tools
 github.com/go-iiif/go-iiif/aws
 github.com/go-iiif/go-iiif/level
+github.com/go-iiif/go-iiif/service
 github.com/go-iiif/go-iiif/compliance
+# github.com/go-iiif/go-iiif-uri v0.0.2
+github.com/go-iiif/go-iiif-uri
+# github.com/go-ini/ini v1.42.0
+github.com/go-ini/ini
 # github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 github.com/golang/freetype/raster
 github.com/golang/freetype/truetype
@@ -61,6 +85,27 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
+# github.com/gonum/blas v0.0.0-20181208220705-f22b278b28ac
+github.com/gonum/blas
+github.com/gonum/blas/blas64
+github.com/gonum/blas/native
+github.com/gonum/blas/native/internal/math32
+# github.com/gonum/floats v0.0.0-20181209220543-c233463c7e82
+github.com/gonum/floats
+# github.com/gonum/internal v0.0.0-20181124074243-f884aa714029
+github.com/gonum/internal/asm/f64
+github.com/gonum/internal/asm/f32
+# github.com/gonum/lapack v0.0.0-20181123203213-e4cdc5a0bff9
+github.com/gonum/lapack
+github.com/gonum/lapack/lapack64
+github.com/gonum/lapack/native
+# github.com/gonum/matrix v0.0.0-20181209220409-c518dec07be9
+github.com/gonum/matrix
+github.com/gonum/matrix/mat64
+# github.com/gonum/stat v0.0.0-20181125101827-41a0da705a5b
+github.com/gonum/stat
+# github.com/google/wire v0.3.0
+github.com/google/wire
 # github.com/googleapis/gax-go v2.0.2+incompatible
 github.com/googleapis/gax-go
 # github.com/hashicorp/golang-lru v0.5.1
@@ -71,6 +116,12 @@ github.com/jmespath/go-jmespath
 github.com/jtacoma/uritemplates
 # github.com/koyachi/go-atkinson v0.0.0-20161206000000-dacd7cb9e0c5d7ce6ece2fee25d765ed11472cf8
 github.com/koyachi/go-atkinson
+# github.com/lucasb-eyer/go-colorful v1.0.2
+github.com/lucasb-eyer/go-colorful
+# github.com/neocortical/noborders v0.0.0-20180218000000-427885311d44ef7204ee600f909ae577f8fc617e
+github.com/neocortical/noborders
+# github.com/nfnt/resize v0.0.0-20180218000000-83c6a9932646f83e3267f353373d47347b6036b2
+github.com/nfnt/resize
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 github.com/patrickmn/go-cache
 # github.com/whosonfirst/go-whosonfirst-aws v0.1.0
@@ -78,6 +129,8 @@ github.com/whosonfirst/go-whosonfirst-aws/s3
 github.com/whosonfirst/go-whosonfirst-aws/session
 github.com/whosonfirst/go-whosonfirst-aws/util
 github.com/whosonfirst/go-whosonfirst-aws/config
+# github.com/whosonfirst/go-whosonfirst-cli v0.1.0
+github.com/whosonfirst/go-whosonfirst-cli/flags
 # github.com/whosonfirst/go-whosonfirst-mimetypes v0.1.0
 github.com/whosonfirst/go-whosonfirst-mimetypes
 github.com/whosonfirst/go-whosonfirst-mimetypes/lookup
@@ -99,11 +152,16 @@ go.opencensus.io/trace/tracestate
 go.opencensus.io
 # gocloud.dev v0.17.0
 gocloud.dev/blob
+gocloud.dev/blob/fileblob
+gocloud.dev/blob/memblob
+gocloud.dev/blob/s3blob
 gocloud.dev/blob/driver
 gocloud.dev/gcerrors
 gocloud.dev/internal/gcerr
 gocloud.dev/internal/oc
 gocloud.dev/internal/openurl
+gocloud.dev/internal/escape
+gocloud.dev/aws
 gocloud.dev/internal/retry
 # golang.org/x/image v0.0.0-20190516052701-61b8692d9a5c
 golang.org/x/image/tiff

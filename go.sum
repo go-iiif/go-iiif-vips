@@ -71,6 +71,8 @@ github.com/go-iiif/go-iiif v1.3.2 h1:v3CXIylwrJpY9cA8pcj/OJ64VmbSEauhLRiZLdjXDC8
 github.com/go-iiif/go-iiif v1.3.2/go.mod h1:5eZNb+yHthKdw4LPeZiNX6cUEM7r4Na76ctpC4wXdcU=
 github.com/go-iiif/go-iiif v1.3.3 h1:Xnmgq7d95lbUGWytYjhJrnNvbmc4Uj4PhbfE0oaAWfM=
 github.com/go-iiif/go-iiif v1.3.3/go.mod h1:oANaoMDeNG4dQm22Yq4M4fdTL28lyhRgD0qyom5zOdE=
+github.com/go-iiif/go-iiif v1.3.4 h1:XsASjz3R6+vlcSC7qwMCvHNKWbBUQFxDKZ5LqTran9Y=
+github.com/go-iiif/go-iiif v1.3.4/go.mod h1:oANaoMDeNG4dQm22Yq4M4fdTL28lyhRgD0qyom5zOdE=
 github.com/go-iiif/go-iiif-uri v0.0.2 h1:logqVfkfMYnmTsl2+PykJGU29y7oz0rn1Y5vsxE+iZc=
 github.com/go-iiif/go-iiif-uri v0.0.2/go.mod h1:XEriqBaHmCaDOjIepc1PXvb94HVCJLdkK27HFp2sAXQ=
 github.com/go-ini/ini v1.25.4/go.mod h1:ByCAeIL28uOIIG0E3PJtZPDL8WnHpFKFOtgjp+3Ies8=
