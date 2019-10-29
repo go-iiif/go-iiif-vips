@@ -7,12 +7,14 @@ cli-tools:
 docker-build:
 	@make docker-process-build
 	@make docker-server-build
-	@make docker-seed-build
+	@make docker-tile-seed-build
 
 docker-process-build:
 	docker build -f Dockerfile.process -t go-iiif-vips-process .
 
-docker-seed-build:
+# docker run -v /path/to/go-iiif-vips/docker:/usr/local/go-iiif go-iiif-vips-tile-seed ls -al /usr/local/go-iiif
+
+docker-tile-seed-build:
 	docker build -f Dockerfile.seed -t go-iiif-vips-tile-seed .
 
 docker-server-build:
