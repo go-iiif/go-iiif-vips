@@ -1,5 +1,7 @@
 package image
 
+// https://iiif.io/api/image/2.1/#image-request-parameters
+
 import (
 	"errors"
 	"fmt"
@@ -161,6 +163,19 @@ func (t *Transformation) RegionInstructions(im Image) (*RegionInstruction, error
 
 	width := dims.Width()
 	height := dims.Height()
+
+	if t.Region == "full" {
+
+		instruction := RegionInstruction{
+			X:         0,
+			Y:         0,
+			Width:     width,
+			Height:    height,
+			SmartCrop: false,
+		}
+
+		return &instruction, nil
+	}
 
 	if t.Region == "square" {
 
@@ -338,6 +353,32 @@ func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 			return nil, errors.New(message)
 		}
 
+		var width int
+		var height int
+
+		if t.Region == "full" {
+
+			dims, err := im.Dimensions()
+
+			if err != nil {
+				return nil, err
+			}
+
+			width = dims.Width()
+			height = dims.Height()
+
+		} else {
+
+			rgi, err := t.RegionInstructions(im)
+
+			if err != nil {
+				return nil, err
+			}
+
+			width = rgi.Width
+			height = rgi.Height
+		}
+
 		wi, err_w := strconv.ParseInt(sizes[0], 10, 64)
 		hi, err_h := strconv.ParseInt(sizes[1], 10, 64)
 
@@ -347,22 +388,12 @@ func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 
 		} else if err_w == nil && err_h == nil {
 
+			// w,h
+
 			w = int(wi)
 			h = int(hi)
 
 			if best {
-
-				// we used to use the vip/bimg "enlarge" command here but
-				// that did not work as expected (20180524/thisisaaronland)
-
-				dims, err := im.Dimensions()
-
-				if err != nil {
-					return nil, err
-				}
-
-				width := dims.Width()
-				height := dims.Height()
 
 				ratio_w := float64(w) / float64(width)
 				ratio_h := float64(h) / float64(height)
@@ -377,10 +408,19 @@ func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 			}
 
 		} else if err_h != nil {
+
+			// w,
+
+			ratio := float64(wi) / float64(width)
 			w = int(wi)
-			h = 0
+			h = int(float64(height) * ratio)
+
 		} else {
-			w = 0
+
+			// ,h
+
+			ratio := float64(hi) / float64(height)
+			w = int(float64(width) * ratio)
 			h = int(hi)
 		}
 
