@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	iiiflevel "github.com/go-iiif/go-iiif/level"
-	_ "log"
+	"log"
 	"math"
 	"net/url"
 	"regexp"
@@ -334,25 +334,6 @@ func (t *Transformation) RegionInstructions(im Image) (*RegionInstruction, error
 
 func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 
-	sizeError := "IIIF 2.1 `size` argument is not recognized: %#v"
-
-	w := 0
-	h := 0
-
-	force := false
-
-	arr := strings.Split(t.Size, ":")
-
-	if len(arr) == 1 {
-
-		best := strings.HasPrefix(t.Size, "!")
-		sizes := strings.Split(strings.Trim(arr[0], "!"), ",")
-
-		if len(sizes) != 2 {
-			message := fmt.Sprintf(sizeError, t.Size)
-			return nil, errors.New(message)
-		}
-
 		var width int
 		var height int
 
@@ -378,7 +359,33 @@ func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 			width = rgi.Width
 			height = rgi.Height
 		}
+	
+	return t.SizeInstructionsWithDimensions(im, width, height)
+}
 
+func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, height int) (*SizeInstruction, error) {
+		
+	sizeError := "IIIF 2.1 `size` argument is not recognized: %#v"
+
+	w := 0
+	h := 0
+
+	force := false
+
+	arr := strings.Split(t.Size, ":")
+
+	if len(arr) == 1 {
+
+		log.Println("SIZE...")
+		
+		best := strings.HasPrefix(t.Size, "!")
+		sizes := strings.Split(strings.Trim(arr[0], "!"), ",")
+
+		if len(sizes) != 2 {
+			message := fmt.Sprintf(sizeError, t.Size)
+			return nil, errors.New(message)
+		}
+		
 		wi, err_w := strconv.ParseInt(sizes[0], 10, 64)
 		hi, err_h := strconv.ParseInt(sizes[1], 10, 64)
 

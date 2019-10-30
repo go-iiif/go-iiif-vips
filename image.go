@@ -13,7 +13,7 @@ import (
 	"gopkg.in/h2non/bimg.v1"
 	"image"
 	"image/gif"
-	_ "log"
+	"log"
 )
 
 type VIPSImage struct {
@@ -185,6 +185,8 @@ func (im *VIPSImage) Dimensions() (iiifimage.Dimensions, error) {
 
 func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
+	log.Println("TRANSFORM...")
+
 	// https://godoc.org/github.com/h2non/bimg#Options
 
 	opts := bimg.Options{}
@@ -262,7 +264,16 @@ func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
 	if t.Size != "max" && t.Size != "full" {
 
-		si, err := t.SizeInstructions(im)
+		dims, err := im.Dimensions()
+
+		if err != nil {
+			return err
+		}
+
+		width := dims.Width()
+		height := dims.Height()
+		
+		si, err := t.SizeInstructionsWithDimensions(im, width, height)
 
 		if err != nil {
 			return err
