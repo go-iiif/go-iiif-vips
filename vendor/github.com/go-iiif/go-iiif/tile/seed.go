@@ -6,6 +6,7 @@ import (
 	"fmt"
 	iiifcache "github.com/go-iiif/go-iiif/cache"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
+	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiiflevel "github.com/go-iiif/go-iiif/level"
 	iiifprofile "github.com/go-iiif/go-iiif/profile"
@@ -18,6 +19,7 @@ import (
 
 type TileSeed struct {
 	config            *iiifconfig.Config
+	driver            iiifdriver.Driver
 	level             iiiflevel.Level
 	images_cache      iiifcache.Cache
 	derivatives_cache iiifcache.Cache
@@ -30,6 +32,12 @@ type TileSeed struct {
 }
 
 func NewTileSeed(config *iiifconfig.Config, h int, w int, endpoint string, quality string, format string) (*TileSeed, error) {
+
+	driver, err := iiifdriver.NewDriverFromConfig(config)
+
+	if err != nil {
+		return nil, err
+	}
 
 	level, err := iiiflevel.NewLevelFromConfig(config, endpoint)
 
@@ -60,6 +68,7 @@ func NewTileSeed(config *iiifconfig.Config, h int, w int, endpoint string, quali
 
 	ts := TileSeed{
 		config:            config,
+		driver:            driver,
 		level:             level,
 		images_cache:      images_cache,
 		derivatives_cache: derivatives_cache,
@@ -78,7 +87,7 @@ func (ts *TileSeed) SeedTiles(src_id string, alt_id string, scales []int, refres
 
 	count := 0
 
-	image, err := iiifimage.NewImageFromConfigWithCache(ts.config, ts.images_cache, src_id)
+	image, err := ts.driver.NewImageFromConfigWithCache(ts.config, ts.images_cache, src_id)
 
 	if err != nil {
 		return count, err
@@ -148,6 +157,8 @@ func (ts *TileSeed) SeedTiles(src_id string, alt_id string, scales []int, refres
 					throttle <- true
 				}()
 
+				// log.SetOutput(os.Stdout)
+
 				uri, _ := tr.ToURI(alt_id)
 
 				if !refresh {
@@ -159,7 +170,14 @@ func (ts *TileSeed) SeedTiles(src_id string, alt_id string, scales []int, refres
 					}
 				}
 
-				tmp, _ := iiifimage.NewImageFromConfigWithSource(ts.config, source, im.Identifier())
+				// tmp, _ := iiifimage.NewImageFromConfigWithSource(ts.config, source, im.Identifier())
+
+				tmp, err := ts.driver.NewImageFromConfigWithSource(ts.config, source, im.Identifier())
+
+				if err != nil {
+					log.Println(err)
+					return
+				}
 
 				err = tmp.Transform(tr)
 

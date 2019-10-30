@@ -359,12 +359,14 @@ func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 			width = rgi.Width
 			height = rgi.Height
 		}
-	
+
 	return t.SizeInstructionsWithDimensions(im, width, height)
 }
 
 func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, height int) (*SizeInstruction, error) {
 		
+	log.Println("SIZE...", width, height)	
+
 	sizeError := "IIIF 2.1 `size` argument is not recognized: %#v"
 
 	w := 0
@@ -375,8 +377,6 @@ func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, hei
 	arr := strings.Split(t.Size, ":")
 
 	if len(arr) == 1 {
-
-		log.Println("SIZE...")
 		
 		best := strings.HasPrefix(t.Size, "!")
 		sizes := strings.Split(strings.Trim(arr[0], "!"), ",")

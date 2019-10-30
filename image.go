@@ -13,7 +13,7 @@ import (
 	"gopkg.in/h2non/bimg.v1"
 	"image"
 	"image/gif"
-	"log"
+	_ "log"
 )
 
 type VIPSImage struct {
@@ -61,42 +61,6 @@ func (dims *GolangImageDimensions) Width() int {
 func (dims *GolangImageDimensions) Height() int {
 	bounds := dims.image.Bounds()
 	return bounds.Max.Y
-}
-
-func NewVIPSImageFromConfigWithSource(config *iiifconfig.Config, src iiifsource.Source, id string) (*VIPSImage, error) {
-
-	body, err := src.Read(id)
-
-	if err != nil {
-		return nil, err
-	}
-
-	bimg := bimg.NewImage(body)
-
-	im := VIPSImage{
-		config:    config,
-		source:    src,
-		source_id: id,
-		id:        id,
-		bimg:      bimg,
-		isgif:     false,
-	}
-
-	/*
-
-		Hey look - see the 'isgif' flag? We're going to hijack the fact that
-		bimg doesn't handle GIF files and if someone requests them then we
-		will do the conversion after the final call to im.bimg.Process and
-		after we do handle any custom features. We are relying on the fact
-		that both bimg.NewImage and bimg.Image() expect and return raw bytes
-		and we are ignoring whatever bimg thinks in the Format() function.
-		So basically you should not try to any processing in bimg/libvips
-		after the -> GIF transformation. (20160922/thisisaaronland)
-
-		See also: https://github.com/h2non/bimg/issues/41
-	*/
-
-	return &im, nil
 }
 
 func (im *VIPSImage) Update(body []byte) error {
@@ -185,8 +149,6 @@ func (im *VIPSImage) Dimensions() (iiifimage.Dimensions, error) {
 
 func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
-	log.Println("TRANSFORM...")
-
 	// https://godoc.org/github.com/h2non/bimg#Options
 
 	opts := bimg.Options{}
@@ -272,7 +234,7 @@ func (im *VIPSImage) Transform(t *iiifimage.Transformation) error {
 
 		width := dims.Width()
 		height := dims.Height()
-		
+
 		si, err := t.SizeInstructionsWithDimensions(im, width, height)
 
 		if err != nil {
