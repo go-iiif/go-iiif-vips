@@ -12,10 +12,8 @@ docker-build:
 docker-process-build:
 	docker build -f Dockerfile.process -t go-iiif-vips-process .
 
-# docker run -v /path/to/go-iiif-vips/docker:/usr/local/go-iiif go-iiif-vips-tile-seed ls -al /usr/local/go-iiif
-
 docker-tile-seed-build:
-	docker build -f Dockerfile.seed -t go-iiif-vips-tile-seed .
+	docker build -f Dockerfile.tileseed -t go-iiif-vips-tile-seed .
 
 docker-server-build:
 	docker build -f Dockerfile.server -t go-iiif-vips-server .
