@@ -1,5 +1,9 @@
 # go-iiif-vips
 
+`go-iiif` driver for libvips.
+
+## Important
+
 This is work in progress. It should be considered to "work... until it doesn't".
 
 ## See also
