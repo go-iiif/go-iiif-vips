@@ -60,7 +60,7 @@ github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214200932-673f57e7b1b5
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v0.0.0-20191101185309-1c67fb08265a
+# github.com/go-iiif/go-iiif v0.0.0-20191101193500-7ab2ceba9d03
 github.com/go-iiif/go-iiif/cache
 github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver
