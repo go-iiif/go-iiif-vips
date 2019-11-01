@@ -5,13 +5,14 @@ import (
 	"fmt"
 	iiifuri "github.com/go-iiif/go-iiif-uri"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
-	iiifimage "github.com/go-iiif/go-iiif/image"
+	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifservice "github.com/go-iiif/go-iiif/service"
 	"log"
+	"net/url"
 	"sync"
 )
 
-func ParallelProcessURIWithInstructionSet(cfg *iiifconfig.Config, pr Processor, instruction_set IIIFInstructionSet, u iiifuri.URI) (map[string]interface{}, error) {
+func ParallelProcessURIWithInstructionSet(cfg *iiifconfig.Config, driver iiifdriver.Driver, pr Processor, instruction_set IIIFInstructionSet, u iiifuri.URI) (map[string]interface{}, error) {
 
 	done_ch := make(chan bool)
 	err_ch := make(chan error)
@@ -31,7 +32,9 @@ func ParallelProcessURIWithInstructionSet(cfg *iiifconfig.Config, pr Processor, 
 			done_ch <- true
 		}()
 
-		im, err := iiifimage.NewImageFromConfig(cfg, u.URL())
+		origin := u.Origin()
+
+		im, err := driver.NewImageFromConfig(cfg, origin)
 
 		if err != nil {
 			msg := fmt.Sprintf("failed to derive palette for %s : %s", u, err)
@@ -68,10 +71,50 @@ func ParallelProcessURIWithInstructionSet(cfg *iiifconfig.Config, pr Processor, 
 				done_ch <- true
 			}()
 
-			new_uri, im, err := pr.ProcessURIWithInstructions(u, label, i)
+			var process_uri iiifuri.URI
+
+			switch u.Driver() {
+			case "idsecret":
+
+				str_label := fmt.Sprintf("%s", label)
+
+				opts := &url.Values{}
+				opts.Set("label", str_label)
+				opts.Set("format", i.Format)
+
+				if str_label == "o" {
+					opts.Set("original", "1")
+				}
+
+				target_str, err := u.Target(opts)
+
+				if err != nil {
+					msg := fmt.Sprintf("failed to derive target %s (%s) : %s", u, label, err)
+					err_ch <- errors.New(msg)
+					return
+				}
+
+				origin := u.Origin()
+
+				rw_str := fmt.Sprintf("%s://%s?target=%s", iiifuri.RewriteDriverName, origin, target_str)
+				rw_uri, err := iiifuri.NewURI(rw_str)
+
+				if err != nil {
+					msg := fmt.Sprintf("failed to generate rewrite URL %s (%s) : %s", u, label, err)
+					err_ch <- errors.New(msg)
+					return
+				}
+
+				process_uri = rw_uri
+
+			default:
+				process_uri = u
+			}
+
+			new_uri, im, err := pr.ProcessURIWithInstructions(process_uri, label, i)
 
 			if err != nil {
-				msg := fmt.Sprintf("failed to process %s (%s) : %s", u, label, err)
+				msg := fmt.Sprintf("failed to process %s (%s) : %s", u.String(), label, err)
 				err_ch <- errors.New(msg)
 				return
 			}

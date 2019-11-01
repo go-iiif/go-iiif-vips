@@ -1,7 +1,5 @@
 package tools
 
-// THIS FILE WILL BE REMOVED ONCE IT IS PART OF go-iiif PROPER
-
 import (
 	"context"
 	"flag"
@@ -9,11 +7,11 @@ import (
 	"github.com/aaronland/gocloud-blob-bucket"
 	iiifcache "github.com/go-iiif/go-iiif/cache"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
+	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifhttp "github.com/go-iiif/go-iiif/http"
 	iiiflevel "github.com/go-iiif/go-iiif/level"
 	iiifserver "github.com/go-iiif/go-iiif/server"
 	iiifsource "github.com/go-iiif/go-iiif/source"
-	iiiftools "github.com/go-iiif/go-iiif/tools"
 	"github.com/gorilla/mux"
 	"log"
 	"net/url"
@@ -22,10 +20,10 @@ import (
 )
 
 type IIIFServerTool struct {
-	iiiftools.Tool
+	Tool
 }
 
-func NewIIIFServerTool() (iiiftools.Tool, error) {
+func NewIIIFServerTool() (Tool, error) {
 
 	t := &IIIFServerTool{}
 	return t, nil
@@ -71,6 +69,12 @@ func (t *IIIFServerTool) Run(ctx context.Context) error {
 		return err
 	}
 
+	driver, err := iiifdriver.NewDriverFromConfig(config)
+
+	if err != nil {
+		return err
+	}
+
 	/*
 		See this - we're just going to make sure we have a valid source
 		before we start serving images (20160901/thisisaaronland)
@@ -108,15 +112,13 @@ func (t *IIIFServerTool) Run(ctx context.Context) error {
 		return err
 	}
 
-	// info_handler, err := iiifhttp.InfoHandler(config, driver)
-	info_handler, err := iiifhttp.InfoHandler(config)
+	info_handler, err := iiifhttp.InfoHandler(config, driver)
 
 	if err != nil {
 		return err
 	}
 
-	// image_handler, err := iiifhttp.ImageHandler(config, driver, images_cache, derivatives_cache)
-	image_handler, err := iiifhttp.ImageHandler(config, images_cache, derivatives_cache)
+	image_handler, err := iiifhttp.ImageHandler(config, driver, images_cache, derivatives_cache)
 
 	if err != nil {
 		return err

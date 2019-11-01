@@ -1,7 +1,5 @@
 package tools
 
-// THIS FILE WILL BE REMOVED ONCE IT IS PART OF go-iiif PROPER
-
 import (
 	"context"
 	"errors"
@@ -10,12 +8,12 @@ import (
 	"github.com/aaronland/gocloud-blob-bucket"
 	aws_events "github.com/aws/aws-lambda-go/events"
 	aws_lambda "github.com/aws/aws-lambda-go/lambda"
+	iiifuri "github.com/go-iiif/go-iiif-uri"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
 	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiiflevel "github.com/go-iiif/go-iiif/level"
 	iiifsource "github.com/go-iiif/go-iiif/source"
-	iiiftools "github.com/go-iiif/go-iiif/tools"
 	"github.com/whosonfirst/go-whosonfirst-cli/flags"
 	"gocloud.dev/blob"
 	"io/ioutil"
@@ -24,10 +22,10 @@ import (
 )
 
 type TransformTool struct {
-	iiiftools.Tool
+	Tool
 }
 
-func NewTransformTool() (iiiftools.Tool, error) {
+func NewTransformTool() (Tool, error) {
 
 	t := &TransformTool{}
 	return t, nil
@@ -41,11 +39,11 @@ type TransformOptions struct {
 	TargetBucket   *blob.Bucket
 }
 
-func TransformMany(ctx context.Context, opts *TransformOptions, fnames ...string) error {
+func TransformMany(ctx context.Context, opts *TransformOptions, uris ...iiifuri.URI) error {
 
-	for _, fname := range fnames {
+	for _, uri := range uris {
 
-		err := Transform(ctx, opts, fname)
+		err := Transform(ctx, opts, uri)
 
 		if err != nil {
 			return err
@@ -55,9 +53,16 @@ func TransformMany(ctx context.Context, opts *TransformOptions, fnames ...string
 	return nil
 }
 
-func Transform(ctx context.Context, opts *TransformOptions, fname string) error {
+func Transform(ctx context.Context, opts *TransformOptions, uri iiifuri.URI) error {
 
-	fh, err := opts.SourceBucket.NewReader(ctx, fname, nil)
+	origin := uri.Origin()
+	target, err := uri.Target(nil)
+
+	if err != nil {
+		return err
+	}
+
+	fh, err := opts.SourceBucket.NewReader(ctx, origin, nil)
 
 	if err != nil {
 		return err
@@ -81,7 +86,7 @@ func Transform(ctx context.Context, opts *TransformOptions, fname string) error 
 		return err
 	}
 
-	image, err := opts.Driver.NewImageFromConfigWithSource(opts.Config, source, fname)
+	image, err := opts.Driver.NewImageFromConfigWithSource(opts.Config, source, origin)
 
 	if err != nil {
 		return err
@@ -93,7 +98,7 @@ func Transform(ctx context.Context, opts *TransformOptions, fname string) error 
 		return err
 	}
 
-	wr, err := opts.TargetBucket.NewWriter(ctx, fname, nil)
+	wr, err := opts.TargetBucket.NewWriter(ctx, target, nil)
 
 	if err != nil {
 
@@ -119,19 +124,19 @@ func (t *TransformTool) Run(ctx context.Context) error {
 
 	var cfg = flag.String("config", "", "Path to a valid go-iiif config file. DEPRECATED - please use -config_source and -config name.")
 
-	var config_source = flag.String("config-source", "", "")
-	var config_name = flag.String("config-name", "config.json", "")
+	var config_source = flag.String("config-source", "", "A valid Go Cloud bucket URI where your go-iiif config file is located.")
+	var config_name = flag.String("config-name", "config.json", "The name of your go-iiif config file.")
 
-	var region = flag.String("region", "full", "")
-	var size = flag.String("size", "full", "")
-	var rotation = flag.String("rotation", "0", "")
-	var quality = flag.String("quality", "default", "")
-	var format = flag.String("format", "jpg", "")
+	var region = flag.String("region", "full", "A valid IIIF 2.0 region value.")
+	var size = flag.String("size", "full", "A valid IIIF 2.0 size value.")
+	var rotation = flag.String("rotation", "0", "A valid IIIF 2.0 rotation value.")
+	var quality = flag.String("quality", "default", "A valid IIIF 2.0 quality value.")
+	var format = flag.String("format", "jpg", "A valid IIIF 2.0 format value.")
 
-	var source_path = flag.String("source", "file:///", "...")
-	var target_path = flag.String("target", "file:///", "...")
+	var source_path = flag.String("source", "file:///", "A valid Go Cloud bucket URI where the source file to transform is located.")
+	var target_path = flag.String("target", "file:///", "A valid Go Cloud bucket URI where the transformed file should be written.")
 
-	var mode = flag.String("mode", "cli", "...")
+	var mode = flag.String("mode", "cli", "Valid modes are: cli, lambda.")
 
 	flag.Parse()
 
@@ -207,13 +212,22 @@ func (t *TransformTool) Run(ctx context.Context) error {
 		TargetBucket:   target_bucket,
 	}
 
-	to_transform := make([]string, 0)
-
 	switch *mode {
 
 	case "cli":
 
-		to_transform = flag.Args()
+		to_transform := make([]iiifuri.URI, 0)
+
+		for _, str_uri := range flag.Args() {
+
+			u, err := iiifuri.NewURI(str_uri)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			to_transform = append(to_transform, u)
+		}
 
 		err = TransformMany(ctx, transform_opts, to_transform...)
 
@@ -225,6 +239,8 @@ func (t *TransformTool) Run(ctx context.Context) error {
 
 		handler := func(ctx context.Context, ev aws_events.S3Event) error {
 
+			to_transform := make([]iiifuri.URI, 0)
+
 			for _, r := range ev.Records {
 
 				s3_entity := r.S3
@@ -232,7 +248,14 @@ func (t *TransformTool) Run(ctx context.Context) error {
 				s3_key := s3_obj.Key
 
 				s3_fname := filepath.Base(s3_key)
-				to_transform = append(to_transform, s3_fname)
+
+				u, err := iiifuri.NewURI(s3_fname)
+
+				if err != nil {
+					return err
+				}
+
+				to_transform = append(to_transform, u)
 			}
 
 			err := TransformMany(ctx, transform_opts, to_transform...)

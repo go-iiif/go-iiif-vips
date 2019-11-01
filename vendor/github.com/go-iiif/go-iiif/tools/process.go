@@ -1,6 +1,7 @@
 package tools
 
-// THIS FILE WILL BE REMOVED ONCE IT IS PART OF go-iiif PROPER
+// ./bin/iiif-process -config config.json -instructions instructions.json -uri avocado.png
+// {"avocado.png":{"b":"avocado.png/full/!2048,1536/0/color.jpg","d":"avocado.png/-1,-1,320,320/full/0/dither.jpg","o":"avocado.png/full/full/-1/color.jpg"}}
 
 import (
 	"context"
@@ -11,12 +12,11 @@ import (
 	"github.com/aaronland/gocloud-blob-bucket"
 	aws_events "github.com/aws/aws-lambda-go/events"
 	aws_lambda "github.com/aws/aws-lambda-go/lambda"
-	"github.com/go-iiif/go-iiif-uri"
+	iiifuri "github.com/go-iiif/go-iiif-uri"
 	iiifcache "github.com/go-iiif/go-iiif/cache"
 	"github.com/go-iiif/go-iiif/config"
 	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	"github.com/go-iiif/go-iiif/process"
-	iiiftools "github.com/go-iiif/go-iiif/tools"
 	"github.com/whosonfirst/go-whosonfirst-cli/flags"
 	"log"
 	"path/filepath"
@@ -24,10 +24,10 @@ import (
 )
 
 type ProcessTool struct {
-	iiiftools.Tool
+	Tool
 }
 
-func NewProcessTool() (iiiftools.Tool, error) {
+func NewProcessTool() (Tool, error) {
 
 	t := &ProcessTool{}
 	return t, nil
@@ -38,26 +38,20 @@ type ProcessOptions struct {
 	Driver       iiifdriver.Driver
 	Processor    process.Processor
 	Instructions process.IIIFInstructionSet
-	URIType      string
 	Report       bool
 	ReportName   string
 }
 
-func ProcessMany(ctx context.Context, opts *ProcessOptions, uris ...string) error {
+func ProcessMany(ctx context.Context, opts *ProcessOptions, uris ...iiifuri.URI) error {
 
 	results := make(map[string]interface{})
 	wg := new(sync.WaitGroup)
 
-	for _, str_uri := range uris {
+	for _, uri := range uris {
 
-		u, err := uri.NewURIWithType(str_uri, opts.URIType)
+		origin := uri.Origin()
 
-		if err != nil {
-			return err
-		}
-
-		// rsp, err := process.ParallelProcessURIWithInstructionSet(opts.Config, opts.Driver, opts.Processor, opts.Instructions, u)
-		rsp, err := process.ParallelProcessURIWithInstructionSet(opts.Config, opts.Processor, opts.Instructions, u)
+		rsp, err := process.ParallelProcessURIWithInstructionSet(opts.Config, opts.Driver, opts.Processor, opts.Instructions, uri)
 
 		if err != nil {
 			return err
@@ -65,7 +59,7 @@ func ProcessMany(ctx context.Context, opts *ProcessOptions, uris ...string) erro
 
 		if opts.Report {
 
-			key := filepath.Join(str_uri, opts.ReportName)
+			key := filepath.Join(origin, opts.ReportName)
 			wg.Add(1)
 
 			go func() {
@@ -79,7 +73,7 @@ func ProcessMany(ctx context.Context, opts *ProcessOptions, uris ...string) erro
 			}()
 		}
 
-		results[str_uri] = rsp
+		results[origin] = rsp
 	}
 
 	wg.Wait()
@@ -99,21 +93,16 @@ func (t *ProcessTool) Run(ctx context.Context) error {
 	var iiif_config = flag.String("config", "", "Path to a valid go-iiif config file. DEPRECATED - please use -config_source and -config name.")
 	var instructions = flag.String("instructions", "", "Path to a valid go-iiif processing instructions file. DEPRECATED - please use -instructions-source and -instructions-name.")
 
-	var config_source = flag.String("config-source", "", "")
-	var config_name = flag.String("config-name", "config.json", "")
+	var config_source = flag.String("config-source", "", "A valid Go Cloud bucket URI where your go-iiif config file is located.")
+	var config_name = flag.String("config-name", "config.json", "The name of your go-iiif config file.")
 
-	var instructions_source = flag.String("instructions-source", "", "")
-	var instructions_name = flag.String("instructions-name", "instructions.json", "")
+	var instructions_source = flag.String("instructions-source", "", "A valid Go Cloud bucket URI where your go-iiif instructions file is located.")
+	var instructions_name = flag.String("instructions-name", "instructions.json", "The name of your go-iiif instructions file.")
 
 	var report = flag.Bool("report", false, "Store a process report (JSON) for each URI in the cache tree.")
 	var report_name = flag.String("report-name", "process.json", "The filename for process reports. Default is 'process.json' as in '${URI}/process.json'.")
 
-	var uri_type = flag.String("uri-type", "string", "A valid (go-iiif-uri) URI type. Valid options are: string, idsecret")
-
-	var flag_uris flags.MultiString
-	flag.Var(&flag_uris, "uri", "One or more valid IIIF URIs.")
-
-	mode := flag.String("mode", "cli", "...")
+	mode := flag.String("mode", "cli", "Valid modes are: cli, lambda.")
 
 	flag.Parse()
 
@@ -181,8 +170,7 @@ func (t *ProcessTool) Run(ctx context.Context) error {
 		return err
 	}
 
-	// pr, err := process.NewIIIFProcessor(cfg, driver)
-	pr, err := process.NewIIIFProcessor(cfg)
+	pr, err := process.NewIIIFProcessor(cfg, driver)
 
 	if err != nil {
 		return err
@@ -193,22 +181,28 @@ func (t *ProcessTool) Run(ctx context.Context) error {
 		Processor:    pr,
 		Driver:       driver,
 		Instructions: instructions_set,
-		URIType:      *uri_type,
 		Report:       *report,
 		ReportName:   *report_name,
 	}
-
-	uris := make([]string, 0)
 
 	switch *mode {
 
 	case "cli":
 
-		for _, u := range flag_uris {
-			uris = append(uris, u)
+		to_process := make([]iiifuri.URI, 0)
+
+		for _, str_uri := range flag.Args() {
+
+			u, err := iiifuri.NewURI(str_uri)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			to_process = append(to_process, u)
 		}
 
-		err = ProcessMany(ctx, process_opts, uris...)
+		err = ProcessMany(ctx, process_opts, to_process...)
 
 		if err != nil {
 			return err
@@ -217,6 +211,8 @@ func (t *ProcessTool) Run(ctx context.Context) error {
 	case "lambda":
 
 		handler := func(ctx context.Context, ev aws_events.S3Event) error {
+
+			to_process := make([]iiifuri.URI, 0)
 
 			for _, r := range ev.Records {
 
@@ -227,10 +223,17 @@ func (t *ProcessTool) Run(ctx context.Context) error {
 				// HOW TO WRANGLE THIS IN TO A BESPOKE URI? NECESSARY?
 
 				s3_fname := filepath.Base(s3_key)
-				uris = append(uris, s3_fname)
+
+				u, err := iiifuri.NewURI(s3_fname)
+
+				if err != nil {
+					return err
+				}
+
+				to_process = append(to_process, u)
 			}
 
-			err = ProcessMany(ctx, process_opts, uris...)
+			err = ProcessMany(ctx, process_opts, to_process...)
 
 			if err != nil {
 				return err

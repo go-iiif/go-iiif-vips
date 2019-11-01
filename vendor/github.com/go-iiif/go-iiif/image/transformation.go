@@ -334,37 +334,37 @@ func (t *Transformation) RegionInstructions(im Image) (*RegionInstruction, error
 
 func (t *Transformation) SizeInstructions(im Image) (*SizeInstruction, error) {
 
-		var width int
-		var height int
+	var width int
+	var height int
 
-		if t.Region == "full" {
+	if t.Region == "full" {
 
-			dims, err := im.Dimensions()
+		dims, err := im.Dimensions()
 
-			if err != nil {
-				return nil, err
-			}
-
-			width = dims.Width()
-			height = dims.Height()
-
-		} else {
-
-			rgi, err := t.RegionInstructions(im)
-
-			if err != nil {
-				return nil, err
-			}
-
-			width = rgi.Width
-			height = rgi.Height
+		if err != nil {
+			return nil, err
 		}
+
+		width = dims.Width()
+		height = dims.Height()
+
+	} else {
+
+		rgi, err := t.RegionInstructions(im)
+
+		if err != nil {
+			return nil, err
+		}
+
+		width = rgi.Width
+		height = rgi.Height
+	}
 
 	return t.SizeInstructionsWithDimensions(im, width, height)
 }
 
 func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, height int) (*SizeInstruction, error) {
-		
+
 	sizeError := "IIIF 2.1 `size` argument is not recognized: %#v"
 
 	w := 0
@@ -372,10 +372,21 @@ func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, hei
 
 	force := false
 
+	if t.Size == "full" {
+
+		instruction := SizeInstruction{
+			Height: height,
+			Width:  width,
+			Force:  force,
+		}
+
+		return &instruction, nil
+	}
+
 	arr := strings.Split(t.Size, ":")
 
 	if len(arr) == 1 {
-		
+
 		best := strings.HasPrefix(t.Size, "!")
 		sizes := strings.Split(strings.Trim(arr[0], "!"), ",")
 
@@ -383,7 +394,7 @@ func (t *Transformation) SizeInstructionsWithDimensions(im Image, width int, hei
 			message := fmt.Sprintf(sizeError, t.Size)
 			return nil, errors.New(message)
 		}
-		
+
 		wi, err_w := strconv.ParseInt(sizes[0], 10, 64)
 		hi, err_h := strconv.ParseInt(sizes[1], 10, 64)
 

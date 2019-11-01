@@ -1,7 +1,5 @@
 package tools
 
-// THIS FILE WILL BE REMOVED ONCE IT IS PART OF go-iiif PROPER
-
 import (
 	"context"
 	"errors"
@@ -10,9 +8,9 @@ import (
 	"github.com/aaronland/gocloud-blob-bucket"
 	aws_events "github.com/aws/aws-lambda-go/events"
 	aws_lambda "github.com/aws/aws-lambda-go/lambda"
+	iiifuri "github.com/go-iiif/go-iiif-uri"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
 	iiiftile "github.com/go-iiif/go-iiif/tile"
-	iiiftools "github.com/go-iiif/go-iiif/tools"
 	"github.com/whosonfirst/go-whosonfirst-cli/flags"
 	"github.com/whosonfirst/go-whosonfirst-csv"
 	"github.com/whosonfirst/go-whosonfirst-log"
@@ -33,37 +31,37 @@ type Seed struct {
 }
 
 type TileSeedTool struct {
-	iiiftools.Tool
+	Tool
 }
 
-func SeedFromString(id string, no_extension bool) *Seed {
+func SeedFromString(str_uri string, no_extension bool) (*Seed, error) {
 
-	var src_id string
-	var alt_id string
+	u, err := iiifuri.NewURI(str_uri)
 
-	pointers := strings.Split(id, ",")
+	if err != nil {
+		return nil, err
+	}
 
-	if len(pointers) == 2 {
-		src_id = pointers[0]
-		alt_id = pointers[1]
-	} else {
-		src_id = pointers[0]
-		alt_id = pointers[0]
+	origin := u.Origin()
+	target, err := u.Target(nil)
+
+	if err != nil {
+		return nil, err
 	}
 
 	if no_extension {
-		alt_id = strings.TrimSuffix(alt_id, filepath.Ext(alt_id))
+		target = strings.TrimSuffix(target, filepath.Ext(target))
 	}
 
 	seed := &Seed{
-		Source: src_id,
-		Target: alt_id,
+		Source: origin,
+		Target: target,
 	}
 
-	return seed
+	return seed, nil
 }
 
-func NewTileSeedTool() (iiiftools.Tool, error) {
+func NewTileSeedTool() (Tool, error) {
 
 	t := &TileSeedTool{}
 	return t, nil
@@ -71,12 +69,12 @@ func NewTileSeedTool() (iiiftools.Tool, error) {
 
 func (t *TileSeedTool) Run(ctx context.Context) error {
 
-	var cfg = flag.String("config", "", "Path to a valid go-iiif config file. DEPRECATED - please use -config-url and -config name.")
+	var cfg = flag.String("config", "", "Path to a valid go-iiif config file. DEPRECATED - please use -config-source and -config name.")
 
-	var config_source = flag.String("config-source", "", "")
-	var config_name = flag.String("config-name", "config.json", "")
+	var config_source = flag.String("config-source", "", "A valid Go Cloud bucket URI where your go-iiif config file is located.")
+	var config_name = flag.String("config-name", "config.json", "The name of your go-iiif config file.")
 
-	var csv_source = flag.String("csv-source", "", "")
+	var csv_source = flag.String("csv-source", "A valid Go Cloud bucket URI where your CSV tileseed files are located.", "")
 
 	var sf = flag.String("scale-factors", "4", "A comma-separated list of scale factors to seed tiles with")
 	var quality = flag.String("quality", "default", "A valid IIIF quality parameter - if \"default\" then the code will try to determine which format you've set as the default")
@@ -84,7 +82,7 @@ func (t *TileSeedTool) Run(ctx context.Context) error {
 	var logfile = flag.String("logfile", "", "Write logging information to this file")
 	var loglevel = flag.String("loglevel", "info", "The amount of logging information to include, valid options are: debug, info, status, warning, error, fatal")
 	var processes = flag.Int("processes", runtime.NumCPU(), "The number of concurrent processes to use when tiling images")
-	var mode = flag.String("mode", "cli", "...")
+	var mode = flag.String("mode", "cli", "Valid modes are: cli, csv, lambda.")
 
 	var noextension = flag.Bool("noextension", false, "Remove any extension from destination folder name.")
 
@@ -130,7 +128,6 @@ func (t *TileSeedTool) Run(ctx context.Context) error {
 		return err
 	}
 
-	// ts, err := iiiftile.NewTileSeed(config, driver, 256, 256, *endpoint, *quality, *format)
 	ts, err := iiiftile.NewTileSeed(config, 256, 256, *endpoint, *quality, *format)
 
 	if err != nil {
@@ -223,7 +220,13 @@ func (t *TileSeedTool) Run(ctx context.Context) error {
 		wg := new(sync.WaitGroup)
 
 		for _, id := range flag.Args() {
-			seed := SeedFromString(id, *noextension)
+
+			seed, err := SeedFromString(id, *noextension)
+
+			if err != nil {
+				logger.Fatal(err)
+			}
+
 			tile_func(seed, wg)
 		}
 
@@ -310,7 +313,12 @@ func (t *TileSeedTool) Run(ctx context.Context) error {
 
 				s3_fname := filepath.Base(s3_key)
 
-				seed := SeedFromString(s3_fname, *noextension)
+				seed, err := SeedFromString(s3_fname, *noextension)
+
+				if err != nil {
+					return err
+				}
+
 				tile_func(seed, wg)
 			}
 

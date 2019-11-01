@@ -1,14 +1,24 @@
 package process
 
 import (
+	"fmt"
 	iiifuri "github.com/go-iiif/go-iiif-uri"
 	iiifcache "github.com/go-iiif/go-iiif/cache"
 	iiifconfig "github.com/go-iiif/go-iiif/config"
+	iiifdriver "github.com/go-iiif/go-iiif/driver"
 	iiifimage "github.com/go-iiif/go-iiif/image"
 	iiiflevel "github.com/go-iiif/go-iiif/level"
+	_ "log"
 )
 
-func TransformURIWithInstructions(u iiifuri.URI, i IIIFInstructions, config *iiifconfig.Config, source_cache iiifcache.Cache, dest_cache iiifcache.Cache) (iiifuri.URI, iiifimage.Image, error) {
+func TransformURIWithInstructions(u iiifuri.URI, i IIIFInstructions, config *iiifconfig.Config, driver iiifdriver.Driver, source_cache iiifcache.Cache, dest_cache iiifcache.Cache) (iiifuri.URI, iiifimage.Image, error) {
+
+	origin := u.Origin()
+	target, err := u.Target(nil)
+
+	if err != nil {
+		return nil, nil, err
+	}
 
 	level, err := iiiflevel.NewLevelFromConfig(config, "http://localhost")
 
@@ -22,23 +32,37 @@ func TransformURIWithInstructions(u iiifuri.URI, i IIIFInstructions, config *iii
 		return nil, nil, err
 	}
 
-	new_uri, err := transformation.ToURI(u.URL())
+	// I do not love this...
 
-	if err != nil {
-		return nil, nil, err
-	}
+	switch u.Driver() {
 
-	/*
+	case "rewrite":
+		// pass
+	default:
 
-		cached_im, err := dest_cache.Get(new_uri)
+		tr_uri, err := transformation.ToURI(target)
 
-		if err == nil {
-			return new_uri, cached_im, nil
+		if err != nil {
+			return nil, nil, err
 		}
 
-	*/
+		str_uri := fmt.Sprintf("%s:///%s", iiifuri.FileDriverName, tr_uri)
+		new_uri, err := iiifuri.NewURI(str_uri)
 
-	im, err := iiifimage.NewImageFromConfigWithCache(config, source_cache, u.URL())
+		if err != nil {
+			return nil, nil, err
+		}
+
+		new_target, err := new_uri.Target(nil)
+
+		if err != nil {
+			return nil, nil, err
+		}
+
+		target = new_target
+	}
+
+	im, err := driver.NewImageFromConfigWithCache(config, source_cache, origin)
 
 	if err != nil {
 		return nil, nil, err
@@ -50,17 +74,18 @@ func TransformURIWithInstructions(u iiifuri.URI, i IIIFInstructions, config *iii
 		return nil, nil, err
 	}
 
-	err = dest_cache.Set(new_uri, im.Body())
+	err = dest_cache.Set(target, im.Body())
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	new_u, err := iiifuri.NewStringURI(new_uri)
+	str_uri := fmt.Sprintf("%s:///%s", iiifuri.FileDriverName, target)
+	new_uri, err := iiifuri.NewURI(str_uri)
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return new_u, im, nil
+	return new_uri, im, nil
 }

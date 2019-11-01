@@ -2,27 +2,39 @@ package uri
 
 import (
 	"errors"
+	"fmt"
+	"log"
+	"net/url"
+	"regexp"
 )
 
 type URI interface {
-	URL() string
+	Driver() string
 	String() string
+	Origin() string
+	Target(*url.Values) (string, error)
 }
 
-func NewURIWithType(str_uri string, str_type string) (URI, error) {
+func NewURI(str_uri string) (URI, error) {
 
-	var u URI
-	var e error
+	u, err := NewURIWithDriver(str_uri)
 
-	switch str_type {
-
-	case "string":
-		u, e = NewStringURI(str_uri)
-	case "idsecret":
-		u, e = NewIdSecretURI(str_uri)
-	default:
-		e = errors.New("Unknown URI type")
+	if err == nil {
+		return u, nil
 	}
 
-	return u, e
+	re, re_err := regexp.Compile(`^\w+\:\/\/`)
+
+	if re_err != nil {
+		return nil, re_err
+	}
+
+	if re.MatchString(str_uri) {
+		return nil, errors.New("Invalid or unsupported URI string")
+	}
+
+	file_uri := fmt.Sprintf("%s:///%s", FileDriverName, str_uri)
+	log.Println(str_uri, file_uri)
+
+	return NewURIWithDriver(file_uri)
 }
