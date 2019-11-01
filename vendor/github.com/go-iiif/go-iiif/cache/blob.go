@@ -6,7 +6,7 @@ import (
 	iiifconfig "github.com/go-iiif/go-iiif/config"
 	"gocloud.dev/blob"
 	"io/ioutil"
-	_ "log"
+	"log"
 )
 
 type BlobCache struct {
@@ -15,10 +15,9 @@ type BlobCache struct {
 	bucket     *blob.Bucket
 }
 
-func NewBlobCache(config *iiifconfig.Config) (Cache, error) {
+func NewBlobCache(config iiifconfig.CacheConfig) (Cache, error) {
 
-	cfg := config.Images
-	uri := cfg.Cache.Path
+	uri := config.Path
 
 	return NewBlobCacheFromURI(uri)
 }
@@ -70,6 +69,8 @@ func (bc *BlobCache) Get(uri string) ([]byte, error) {
 }
 
 func (bc *BlobCache) Set(uri string, body []byte) error {
+
+	log.Println("BLOB", "SET", uri)
 
 	ctx := context.Background()
 

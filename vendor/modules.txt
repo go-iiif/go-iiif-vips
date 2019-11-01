@@ -20,24 +20,25 @@ github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
 # github.com/aws/aws-sdk-go v1.20.21
 github.com/aws/aws-sdk-go/aws
-github.com/aws/aws-sdk-go/aws/awserr
+github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/session
+github.com/aws/aws-sdk-go/aws/awserr
+github.com/aws/aws-sdk-go/aws/client
 github.com/aws/aws-sdk-go/service/s3
 github.com/aws/aws-sdk-go/service/s3/s3manager
-github.com/aws/aws-sdk-go/aws/credentials
-github.com/aws/aws-sdk-go/aws/client
 github.com/aws/aws-sdk-go/aws/endpoints
 github.com/aws/aws-sdk-go/internal/sdkio
+github.com/aws/aws-sdk-go/internal/ini
+github.com/aws/aws-sdk-go/internal/shareddefaults
 github.com/aws/aws-sdk-go/aws/corehandlers
 github.com/aws/aws-sdk-go/aws/credentials/processcreds
 github.com/aws/aws-sdk-go/aws/credentials/stscreds
 github.com/aws/aws-sdk-go/aws/csm
 github.com/aws/aws-sdk-go/aws/defaults
 github.com/aws/aws-sdk-go/aws/request
-github.com/aws/aws-sdk-go/internal/ini
-github.com/aws/aws-sdk-go/internal/shareddefaults
-github.com/aws/aws-sdk-go/aws/awsutil
 github.com/aws/aws-sdk-go/aws/client/metadata
+github.com/aws/aws-sdk-go/internal/sdkrand
+github.com/aws/aws-sdk-go/aws/awsutil
 github.com/aws/aws-sdk-go/aws/signer/v4
 github.com/aws/aws-sdk-go/internal/s3err
 github.com/aws/aws-sdk-go/private/protocol
@@ -47,7 +48,6 @@ github.com/aws/aws-sdk-go/private/protocol/rest
 github.com/aws/aws-sdk-go/private/protocol/restxml
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
 github.com/aws/aws-sdk-go/service/s3/s3iface
-github.com/aws/aws-sdk-go/internal/sdkrand
 github.com/aws/aws-sdk-go/service/sts
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
 github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
@@ -60,14 +60,13 @@ github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214200932-673f57e7b1b5
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v0.0.0-20191101000721-dfd2e8bf81ef
+# github.com/go-iiif/go-iiif v0.0.0-20191101185309-1c67fb08265a
 github.com/go-iiif/go-iiif/cache
 github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver
 github.com/go-iiif/go-iiif/image
 github.com/go-iiif/go-iiif/source
 github.com/go-iiif/go-iiif/tools
-github.com/go-iiif/go-iiif/aws
 github.com/go-iiif/go-iiif/level
 github.com/go-iiif/go-iiif/http
 github.com/go-iiif/go-iiif/process
@@ -76,7 +75,7 @@ github.com/go-iiif/go-iiif/tile
 github.com/go-iiif/go-iiif/compliance
 github.com/go-iiif/go-iiif/profile
 github.com/go-iiif/go-iiif/service
-# github.com/go-iiif/go-iiif-uri v0.1.4
+# github.com/go-iiif/go-iiif-uri v0.3.0
 github.com/go-iiif/go-iiif-uri
 # github.com/go-ini/ini v1.42.0
 github.com/go-ini/ini
@@ -134,20 +133,12 @@ github.com/patrickmn/go-cache
 github.com/whosonfirst/algnhsa
 # github.com/whosonfirst/go-sanitize v0.1.0
 github.com/whosonfirst/go-sanitize
-# github.com/whosonfirst/go-whosonfirst-aws v0.1.4
-github.com/whosonfirst/go-whosonfirst-aws/s3
-github.com/whosonfirst/go-whosonfirst-aws/session
-github.com/whosonfirst/go-whosonfirst-aws/util
-github.com/whosonfirst/go-whosonfirst-aws/config
 # github.com/whosonfirst/go-whosonfirst-cli v0.1.0
 github.com/whosonfirst/go-whosonfirst-cli/flags
 # github.com/whosonfirst/go-whosonfirst-csv v0.1.0
 github.com/whosonfirst/go-whosonfirst-csv
 # github.com/whosonfirst/go-whosonfirst-log v0.1.0
 github.com/whosonfirst/go-whosonfirst-log
-# github.com/whosonfirst/go-whosonfirst-mimetypes v0.1.0
-github.com/whosonfirst/go-whosonfirst-mimetypes
-github.com/whosonfirst/go-whosonfirst-mimetypes/lookup
 # go.opencensus.io v0.22.0
 go.opencensus.io/stats
 go.opencensus.io/stats/view
