@@ -4,7 +4,7 @@
 
 ## Important
 
-This is work in progress. It should be considered to "work... until it doesn't".
+You should start by reading the documentation in the [go-iiif](https://github.com/go-iiif/go-iiif/blob/master/README.md) package.
 
 ## Tools
 
@@ -342,7 +342,9 @@ While all columns are required if `alternate_id` is empty the code will simply d
 
 _Important: The use of alternate IDs is not fully supported by `iiif-server` yet. Which is to say to the logic for how to convert a source identifier to an alternate identifier is still outside the scope of `go-iiif` so unless you have pre-rendered all of your tiles or other derivatives (in which case the check for cached derivatives at the top of the imgae handler will be triggered) then the server won't know where to write new alternate files._
 
-## WIP
+## Config files
+
+You should start by reading the [documentation for configuation files](https://github.com/go-iiif/go-iiif/blob/master/README.md#config-files) in the `go-iiif` package. What follows are configuration options specific to the `go-iiif-vips` package.
 
 ### graphics
 
