@@ -389,7 +389,8 @@ $> docker run -it -p 6161:8080 \
    -v /usr/local/go-iiif/docker/etc:/etc/iiif-server \
    -v /usr/local/go-iiif/docker/images:/usr/local/iiif-server \
    go-iiif-vips \
-   /bin/iiif-server -host 0.0.0.0 -config /etc/iiif-server/config.json
+   /bin/iiif-server -host 0.0.0.0 \
+   -config-source /etc/iiif-server
    
 2018/06/20 23:03:10 Listening for requests at 0.0.0.0:8080
 ```
@@ -407,20 +408,33 @@ Let's say you're using S3 as an image source and reading (S3) credentials from e
 
 ```
 $> docker run -it -p 6161:8080 \
-       -v /usr/local/go-iiif/docker/etc:/etc/iiif-server -v /usr/local/go-iiif/docker/images:/usr/local/iiif-server \
+       -v /usr/local/go-iiif/docker/etc:/etc/iiif-server \
+       -v /usr/local/go-iiif/docker/images:/usr/local/iiif-server \
        -e AWS_ACCESS_KEY_ID={AWS_KEY} -e AWS_SECRET_ACCESS_KEY={AWS_SECRET} \
        go-iiif-vips-server \
-       /bin/iiif-server -host 0.0.0.0 -config /etc/iiif-server/config.json       
+       /bin/iiif-server -host 0.0.0.0 \
+       -config-source file:///etc/iiif-server
 ```
 
-The process an image using the `iiif-process` Docker container you would run something like:
+The process an image using the `iiif-process` tool you would run something like:
 
 ```
 $> docker run \
    -v /usr/local/go-iiif/docker/etc:/etc/go-iiif \
-   go-iiif-vips \
-   /bin/iiif-process -config=/etc/go-iiif/config.json -instructions=/etc/go-iiif/instructions.json \
-   -uri=test.jpg
+   go-iiif-vips /bin/iiif-process \
+   -config-source file:///etc/go-iiif \
+   -instructions=/etc/go-iiif/instructions.json \
+   file:///test.jpg
+```
+
+To tile an image using the `iiif-tile-seed` tool you would run something like:
+
+```
+$> docker run -v /usr/local/go-iiif-vips/docker:/usr/local/go-iiif \
+	go-iiif-vips /bin/iiif-tile-seed \
+	-config-source file:////usr/local/go-iiif/config \
+	-scale-factors 1,2,4,8 \
+	file:///zuber.jpg
 ```
 
 Again, see the way we're mapping `/etc/go-iiif` to a local folder, like we do in the `iiif-server` Docker example? The same rules apply here.
