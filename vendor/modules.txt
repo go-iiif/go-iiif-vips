@@ -10,35 +10,31 @@ github.com/aaronland/go-colours/palette
 # github.com/aaronland/go-string v0.1.1
 github.com/aaronland/go-string/dsn
 github.com/aaronland/go-string/random
-# github.com/aaronland/gocloud-blob-bucket v0.0.1
+# github.com/aaronland/gocloud-blob-bucket v0.0.2
 github.com/aaronland/gocloud-blob-bucket
-# github.com/aws/aws-lambda-go v1.13.2
+# github.com/aws/aws-lambda-go v1.13.3
 github.com/aws/aws-lambda-go/events
 github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
 github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
-# github.com/aws/aws-sdk-go v1.20.21
+# github.com/aws/aws-sdk-go v1.25.34
 github.com/aws/aws-sdk-go/aws
-github.com/aws/aws-sdk-go/aws/credentials
-github.com/aws/aws-sdk-go/aws/session
-github.com/aws/aws-sdk-go/aws/awserr
-github.com/aws/aws-sdk-go/aws/client
-github.com/aws/aws-sdk-go/service/s3
 github.com/aws/aws-sdk-go/service/s3/s3manager
+github.com/aws/aws-sdk-go/aws/awserr
+github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/endpoints
 github.com/aws/aws-sdk-go/internal/sdkio
+github.com/aws/aws-sdk-go/aws/awsutil
+github.com/aws/aws-sdk-go/aws/client
+github.com/aws/aws-sdk-go/aws/request
+github.com/aws/aws-sdk-go/service/s3
+github.com/aws/aws-sdk-go/service/s3/s3iface
+github.com/aws/aws-sdk-go/aws/session
 github.com/aws/aws-sdk-go/internal/ini
 github.com/aws/aws-sdk-go/internal/shareddefaults
-github.com/aws/aws-sdk-go/aws/corehandlers
-github.com/aws/aws-sdk-go/aws/credentials/processcreds
-github.com/aws/aws-sdk-go/aws/credentials/stscreds
-github.com/aws/aws-sdk-go/aws/csm
-github.com/aws/aws-sdk-go/aws/defaults
-github.com/aws/aws-sdk-go/aws/request
 github.com/aws/aws-sdk-go/aws/client/metadata
 github.com/aws/aws-sdk-go/internal/sdkrand
-github.com/aws/aws-sdk-go/aws/awsutil
 github.com/aws/aws-sdk-go/aws/signer/v4
 github.com/aws/aws-sdk-go/internal/s3err
 github.com/aws/aws-sdk-go/private/protocol
@@ -47,20 +43,26 @@ github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi
 github.com/aws/aws-sdk-go/private/protocol/rest
 github.com/aws/aws-sdk-go/private/protocol/restxml
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
-github.com/aws/aws-sdk-go/service/s3/s3iface
+github.com/aws/aws-sdk-go/aws/corehandlers
+github.com/aws/aws-sdk-go/aws/credentials/processcreds
+github.com/aws/aws-sdk-go/aws/credentials/stscreds
+github.com/aws/aws-sdk-go/aws/csm
+github.com/aws/aws-sdk-go/aws/defaults
+github.com/aws/aws-sdk-go/internal/sdkmath
+github.com/aws/aws-sdk-go/private/protocol/query
 github.com/aws/aws-sdk-go/service/sts
+github.com/aws/aws-sdk-go/service/sts/stsiface
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
 github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
 github.com/aws/aws-sdk-go/aws/ec2metadata
-github.com/aws/aws-sdk-go/private/protocol/query
+github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 github.com/aws/aws-sdk-go/internal/sdkuri
 github.com/aws/aws-sdk-go/private/protocol/json/jsonutil
-github.com/aws/aws-sdk-go/private/protocol/query/queryutil
 # github.com/fogleman/gg v1.3.0
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214200932-673f57e7b1b5
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v0.0.0-20191101193500-7ab2ceba9d03
+# github.com/go-iiif/go-iiif v0.0.0-20191113000000-ebdecc52795565fe6b4506cfcb4c60d0ac4c905e
 github.com/go-iiif/go-iiif/cache
 github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver
@@ -155,7 +157,7 @@ go.opencensus.io/internal
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/tracestate
 go.opencensus.io
-# gocloud.dev v0.17.0
+# gocloud.dev v0.18.0
 gocloud.dev/blob
 gocloud.dev/blob/fileblob
 gocloud.dev/blob/memblob
