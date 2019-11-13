@@ -5,15 +5,4 @@ cli-tools:
 	go build -mod vendor -o bin/iiif-process cmd/iiif-process/main.go
 
 docker-build:
-	@make docker-process-build
-	@make docker-server-build
-	@make docker-tile-seed-build
-
-docker-process-build:
-	docker build -f Dockerfile.process -t go-iiif-vips-process .
-
-docker-tile-seed-build:
-	docker build -f Dockerfile.tileseed -t go-iiif-vips-tile-seed .
-
-docker-server-build:
-	docker build -f Dockerfile.server -t go-iiif-vips-server .
+	docker build -f Dockerfile -t go-iiif-vips .
