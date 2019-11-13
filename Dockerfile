@@ -36,6 +36,8 @@ RUN wget -O- https://github.com/libvips/libvips/releases/download/v${VIPS_VERSIO
 FROM alpine
 
 COPY --from=builder /vips/lib/ /usr/local/lib
+COPY --from=builder /go-iiif/bin/iiif-process /bin/iiif-process
+COPY --from=builder /go-iiif/bin/iiif-server /bin/iiif-server
 COPY --from=builder /go-iiif/bin/iiif-tile-seed /bin/iiif-tile-seed
 
 RUN apk update \

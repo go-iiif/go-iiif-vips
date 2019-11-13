@@ -368,6 +368,63 @@ The `VIPS` graphics source has the following optional properties:
 
 * **tmpdir** Specify an alternate path where libvips [should write temporary files](http://www.vips.ecs.soton.ac.uk/supported/7.42/doc/html/libvips/VipsImage.html#vips-image-new-temp-file) while processing images. This may be necessary if you are a processing many large files simultaneously and your default "temporary" directory is very small.
 
+## Docker
+
+Yes. There is a [Dockerfile](Dockerfile) included with this distribution. It will build a container with the following tools:
+
+* The `iiif-server` tool.
+* The `iiif-process` command-line tool.
+* The `iiif-tile-seed` command-line tool.
+
+To build the container run:
+
+```
+$> docker build -f Dockerfile -t go-iiif-vips .
+```
+
+To start the `iiif-server` tool run:
+
+```
+$> docker run -it -p 6161:8080 \
+   -v /usr/local/go-iiif/docker/etc:/etc/iiif-server \
+   -v /usr/local/go-iiif/docker/images:/usr/local/iiif-server \
+   go-iiif-vips \
+   /bin/iiif-server -host 0.0.0.0 -config /etc/iiif-server/config.json
+   
+2018/06/20 23:03:10 Listening for requests at 0.0.0.0:8080
+```
+
+See the way we are mapping `/etc/iiif-server` and `/usr/local/iiif-server` to local directories? By default the `iiif-server` Dockerfile does not bundle config files or images. Maybe some day, but that day is not today.
+
+Then, in another terminal:
+
+```
+$> curl localhost:6161/test.jpg/info.json
+{"@context":"http://iiif.io/api/image/2/context.json","@id":"http://localhost:6161/test.jpg","@type":"iiif:Image","protocol":"http://iiif.io/api/image","width":3897,"height":4096,"profile":["http://iiif.io/api/image/2/level2.json",{"formats":["gif","webp","jpg","png","tif"],"qualities":["default","color","dither"],"supports":["full","regionByPx","regionByPct","regionSquare","sizeByDistortedWh","sizeByWh","full","max","sizeByW","sizeByH","sizeByPct","sizeByConfinedWh","none","rotationBy90s","mirroring","noAutoRotate","baseUriRedirect","cors","jsonldMediaType"]}],"service":[{"@context":"x-urn:service:go-iiif#palette","profile":"x-urn:service:go-iiif#palette","label":"x-urn:service:go-iiif#palette","palette":[{"name":"#2f2013","hex":"#2f2013","reference":"vibrant"},{"name":"#9e8e65","hex":"#9e8e65","reference":"vibrant"},{"name":"#c6bca6","hex":"#c6bca6","reference":"vibrant"},{"name":"#5f4d32","hex":"#5f4d32","reference":"vibrant"}]}]}
+```
+
+Let's say you're using S3 as an image source and reading (S3) credentials from environment variables (something like `{"source": { "name": "S3", "path": "{BUCKET}", "region": "us-east-1", "credentials": "env:" }`) then you would start up `iiif-server` like this:
+
+```
+$> docker run -it -p 6161:8080 \
+       -v /usr/local/go-iiif/docker/etc:/etc/iiif-server -v /usr/local/go-iiif/docker/images:/usr/local/iiif-server \
+       -e AWS_ACCESS_KEY_ID={AWS_KEY} -e AWS_SECRET_ACCESS_KEY={AWS_SECRET} \
+       go-iiif-vips-server \
+       /bin/iiif-server -host 0.0.0.0 -config /etc/iiif-server/config.json       
+```
+
+The process an image using the `iiif-process` Docker container you would run something like:
+
+```
+$> docker run \
+   -v /usr/local/go-iiif/docker/etc:/etc/go-iiif \
+   go-iiif-vips \
+   /bin/iiif-process -config=/etc/go-iiif/config.json -instructions=/etc/go-iiif/instructions.json \
+   -uri=test.jpg
+```
+
+Again, see the way we're mapping `/etc/go-iiif` to a local folder, like we do in the `iiif-server` Docker example? The same rules apply here.
+
 ## See also
 
 * https://github.com/go-iiif/go-iiif
