@@ -423,7 +423,7 @@ $> docker run \
    -v /usr/local/go-iiif/docker/etc:/etc/go-iiif \
    go-iiif-vips /bin/iiif-process \
    -config-source file:///etc/go-iiif \
-   -instructions=/etc/go-iiif/instructions.json \
+   -instruction-source file:///etc/go-iiif \
    file:///test.jpg
 ```
 
