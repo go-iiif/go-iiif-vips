@@ -90,6 +90,8 @@ github.com/fortytw2/leaktest v1.2.0/go.mod h1:jDsjWgpAGjm2CA7WthBh/CdZYEPF31XHqu
 github.com/fortytw2/leaktest v1.3.0/go.mod h1:jDsjWgpAGjm2CA7WthBh/CdZYEPF31XHquHwclZch5g=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
+github.com/go-iiif/go-iiif v0.0.0-20191025215514-9ed6a281afc4 h1:RYHSHIviFjjBCLBFsodApe2cj6fsp3rOy2U/hnvG6pI=
+github.com/go-iiif/go-iiif v0.0.0-20191025215514-9ed6a281afc4/go.mod h1:uzxfXYk5XsLb4TFT6/gfTNBVnnP4mTqXtnrtjZvr3+4=
 github.com/go-iiif/go-iiif v0.0.0-20191101000721-dfd2e8bf81ef h1:gHbWB6uLqxItWLsFsj/l7mrsvvIuGniHXUC4SaYUOIo=
 github.com/go-iiif/go-iiif v0.0.0-20191101000721-dfd2e8bf81ef/go.mod h1:+WKZ6VBSk74sD8BFmpDBwMhQ6C3m3cgQPV6QD741SMQ=
 github.com/go-iiif/go-iiif v0.0.0-20191101185309-1c67fb08265a h1:+/yiplyuyFJ9S7maQhUr+vO4NphVapKRXv70SPBA4uI=
@@ -98,6 +100,8 @@ github.com/go-iiif/go-iiif v0.0.0-20191101193500-7ab2ceba9d03 h1:E/hWyfuJzkb0YQJ
 github.com/go-iiif/go-iiif v0.0.0-20191101193500-7ab2ceba9d03/go.mod h1:/5XXXTqgRxVNW60HVfmqLvT0QDFlkKybxCEBqS8xwms=
 github.com/go-iiif/go-iiif v0.0.0-20191113000000-ebdecc52795565fe6b4506cfcb4c60d0ac4c905e h1:F66uPlu6cD0IOaOmQLibm0WjdlLkNhLJ2yXF1kE+8rI=
 github.com/go-iiif/go-iiif v0.0.0-20191113000000-ebdecc52795565fe6b4506cfcb4c60d0ac4c905e/go.mod h1:1IckjT2BFM+Xc16mUqqrizvoHxT2DvqGRB0S6xjxdCA=
+github.com/go-iiif/go-iiif v0.0.0-20191114000000-802e7ff3dc40546c78757c7be3f0fc03f1a60ed6 h1:MSx0GoHfgbhCubvkhxbvjSebGs2OHYhrhGl9cY4xptQ=
+github.com/go-iiif/go-iiif v0.0.0-20191114000000-802e7ff3dc40546c78757c7be3f0fc03f1a60ed6/go.mod h1:1IckjT2BFM+Xc16mUqqrizvoHxT2DvqGRB0S6xjxdCA=
 github.com/go-iiif/go-iiif v1.3.1 h1:1EcHq0y9dD1fnYToFxXkBWYQauPTFByJulnz0NqB6bQ=
 github.com/go-iiif/go-iiif v1.3.1/go.mod h1:5eZNb+yHthKdw4LPeZiNX6cUEM7r4Na76ctpC4wXdcU=
 github.com/go-iiif/go-iiif v1.3.2 h1:v3CXIylwrJpY9cA8pcj/OJ64VmbSEauhLRiZLdjXDC8=
