@@ -62,7 +62,7 @@ github.com/aws/aws-sdk-go/private/protocol/json/jsonutil
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214200932-673f57e7b1b5
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v0.0.0-20191114000000-802e7ff3dc40546c78757c7be3f0fc03f1a60ed6
+# github.com/go-iiif/go-iiif v0.0.0-20191115000000-58b1757bf030c64cf71706361ddde0d0d900fd47
 github.com/go-iiif/go-iiif/cache
 github.com/go-iiif/go-iiif/config
 github.com/go-iiif/go-iiif/driver

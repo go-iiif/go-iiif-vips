@@ -102,6 +102,8 @@ github.com/go-iiif/go-iiif v0.0.0-20191113000000-ebdecc52795565fe6b4506cfcb4c60d
 github.com/go-iiif/go-iiif v0.0.0-20191113000000-ebdecc52795565fe6b4506cfcb4c60d0ac4c905e/go.mod h1:1IckjT2BFM+Xc16mUqqrizvoHxT2DvqGRB0S6xjxdCA=
 github.com/go-iiif/go-iiif v0.0.0-20191114000000-802e7ff3dc40546c78757c7be3f0fc03f1a60ed6 h1:MSx0GoHfgbhCubvkhxbvjSebGs2OHYhrhGl9cY4xptQ=
 github.com/go-iiif/go-iiif v0.0.0-20191114000000-802e7ff3dc40546c78757c7be3f0fc03f1a60ed6/go.mod h1:1IckjT2BFM+Xc16mUqqrizvoHxT2DvqGRB0S6xjxdCA=
+github.com/go-iiif/go-iiif v0.0.0-20191115000000-58b1757bf030c64cf71706361ddde0d0d900fd47 h1:TYVwS3SBMZRSyqWVmyYeSoVY09fBOTDgoYl+GdmU/Nc=
+github.com/go-iiif/go-iiif v0.0.0-20191115000000-58b1757bf030c64cf71706361ddde0d0d900fd47/go.mod h1:1IckjT2BFM+Xc16mUqqrizvoHxT2DvqGRB0S6xjxdCA=
 github.com/go-iiif/go-iiif v1.3.1 h1:1EcHq0y9dD1fnYToFxXkBWYQauPTFByJulnz0NqB6bQ=
 github.com/go-iiif/go-iiif v1.3.1/go.mod h1:5eZNb+yHthKdw4LPeZiNX6cUEM7r4Na76ctpC4wXdcU=
 github.com/go-iiif/go-iiif v1.3.2 h1:v3CXIylwrJpY9cA8pcj/OJ64VmbSEauhLRiZLdjXDC8=
