@@ -1,40 +1,54 @@
 # github.com/RobCherry/vibrant v0.0.0-20160904011657-0680b8cf1c89
 github.com/RobCherry/vibrant
-# github.com/aaronland/go-aws-session v0.0.3
+# github.com/aaronland/go-aws-session v0.0.4
 github.com/aaronland/go-aws-session
+# github.com/aaronland/go-cloud-s3blob v0.1.0
+github.com/aaronland/go-cloud-s3blob
 # github.com/aaronland/go-colours v0.1.1
 github.com/aaronland/go-colours
 github.com/aaronland/go-colours/extruder
 github.com/aaronland/go-colours/grid
 github.com/aaronland/go-colours/palette
-# github.com/aaronland/go-string v0.1.1
+# github.com/aaronland/go-image-resize v0.0.0-20200215211032-65f2cf14b638
+github.com/aaronland/go-image-resize
+# github.com/aaronland/go-image-transform v0.0.0-20200215193528-9bb7b64c2728
+github.com/aaronland/go-image-transform
+# github.com/aaronland/go-roster v0.0.1
+github.com/aaronland/go-roster
+# github.com/aaronland/go-string v0.1.2
 github.com/aaronland/go-string/dsn
 github.com/aaronland/go-string/random
-# github.com/aaronland/gocloud-blob-bucket v0.0.2
-github.com/aaronland/gocloud-blob-bucket
-# github.com/aws/aws-lambda-go v1.13.3
+# github.com/aws/aws-lambda-go v1.16.0
 github.com/aws/aws-lambda-go/events
 github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
 github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
-# github.com/aws/aws-sdk-go v1.25.34
+# github.com/aws/aws-sdk-go v1.30.9
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/service/s3/s3manager
+github.com/aws/aws-sdk-go/aws/session
 github.com/aws/aws-sdk-go/aws/awserr
 github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/endpoints
+github.com/aws/aws-sdk-go/internal/context
 github.com/aws/aws-sdk-go/internal/sdkio
 github.com/aws/aws-sdk-go/aws/awsutil
 github.com/aws/aws-sdk-go/aws/client
 github.com/aws/aws-sdk-go/aws/request
 github.com/aws/aws-sdk-go/service/s3
 github.com/aws/aws-sdk-go/service/s3/s3iface
-github.com/aws/aws-sdk-go/aws/session
+github.com/aws/aws-sdk-go/aws/corehandlers
+github.com/aws/aws-sdk-go/aws/credentials/processcreds
+github.com/aws/aws-sdk-go/aws/credentials/stscreds
+github.com/aws/aws-sdk-go/aws/csm
+github.com/aws/aws-sdk-go/aws/defaults
 github.com/aws/aws-sdk-go/internal/ini
 github.com/aws/aws-sdk-go/internal/shareddefaults
+github.com/aws/aws-sdk-go/internal/sync/singleflight
 github.com/aws/aws-sdk-go/aws/client/metadata
 github.com/aws/aws-sdk-go/internal/sdkrand
+github.com/aws/aws-sdk-go/aws/arn
 github.com/aws/aws-sdk-go/aws/signer/v4
 github.com/aws/aws-sdk-go/internal/s3err
 github.com/aws/aws-sdk-go/private/protocol
@@ -43,48 +57,54 @@ github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi
 github.com/aws/aws-sdk-go/private/protocol/rest
 github.com/aws/aws-sdk-go/private/protocol/restxml
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
-github.com/aws/aws-sdk-go/aws/corehandlers
-github.com/aws/aws-sdk-go/aws/credentials/processcreds
-github.com/aws/aws-sdk-go/aws/credentials/stscreds
-github.com/aws/aws-sdk-go/aws/csm
-github.com/aws/aws-sdk-go/aws/defaults
-github.com/aws/aws-sdk-go/internal/sdkmath
-github.com/aws/aws-sdk-go/private/protocol/query
+github.com/aws/aws-sdk-go/service/s3/internal/arn
 github.com/aws/aws-sdk-go/service/sts
 github.com/aws/aws-sdk-go/service/sts/stsiface
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
 github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
 github.com/aws/aws-sdk-go/aws/ec2metadata
-github.com/aws/aws-sdk-go/private/protocol/query/queryutil
+github.com/aws/aws-sdk-go/internal/strings
+github.com/aws/aws-sdk-go/internal/sdkmath
+github.com/aws/aws-sdk-go/private/protocol/query
 github.com/aws/aws-sdk-go/internal/sdkuri
 github.com/aws/aws-sdk-go/private/protocol/json/jsonutil
+github.com/aws/aws-sdk-go/private/protocol/query/queryutil
+# github.com/buckket/go-blurhash v1.0.3
+github.com/buckket/go-blurhash
+github.com/buckket/go-blurhash/base83
+# github.com/corona10/goimagehash v1.0.2
+github.com/corona10/goimagehash
+github.com/corona10/goimagehash/etcs
+github.com/corona10/goimagehash/transforms
 # github.com/fogleman/gg v1.3.0
 github.com/fogleman/gg
 # github.com/fogleman/primitive v0.0.0-20190214200932-673f57e7b1b5
 github.com/fogleman/primitive/primitive
-# github.com/go-iiif/go-iiif v0.0.0-20191115000000-58b1757bf030c64cf71706361ddde0d0d900fd47
-github.com/go-iiif/go-iiif/cache
-github.com/go-iiif/go-iiif/config
-github.com/go-iiif/go-iiif/driver
-github.com/go-iiif/go-iiif/image
-github.com/go-iiif/go-iiif/source
-github.com/go-iiif/go-iiif/tools
-github.com/go-iiif/go-iiif/level
-github.com/go-iiif/go-iiif/http
-github.com/go-iiif/go-iiif/process
-github.com/go-iiif/go-iiif/server
-github.com/go-iiif/go-iiif/tile
-github.com/go-iiif/go-iiif/compliance
-github.com/go-iiif/go-iiif/profile
-github.com/go-iiif/go-iiif/service
-# github.com/go-iiif/go-iiif-uri v0.3.0
+# github.com/fsnotify/fsnotify v1.4.9
+github.com/fsnotify/fsnotify
+# github.com/go-iiif/go-iiif-uri v0.4.2
 github.com/go-iiif/go-iiif-uri
-# github.com/go-ini/ini v1.42.0
-github.com/go-ini/ini
+# github.com/go-iiif/go-iiif/v3 v3.3.0
+github.com/go-iiif/go-iiif/v3/cache
+github.com/go-iiif/go-iiif/v3/config
+github.com/go-iiif/go-iiif/v3/driver
+github.com/go-iiif/go-iiif/v3/image
+github.com/go-iiif/go-iiif/v3/source
+github.com/go-iiif/go-iiif/v3/tools
+github.com/go-iiif/go-iiif/v3/level
+github.com/go-iiif/go-iiif/v3/http
+github.com/go-iiif/go-iiif/v3/process
+github.com/go-iiif/go-iiif/v3/server
+github.com/go-iiif/go-iiif/v3/tile
+github.com/go-iiif/go-iiif/v3/compliance
+github.com/go-iiif/go-iiif/v3/profile
+github.com/go-iiif/go-iiif/v3/service
 # github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 github.com/golang/freetype/raster
 github.com/golang/freetype/truetype
-# github.com/golang/protobuf v1.3.1
+# github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6
+github.com/golang/groupcache/lru
+# github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
@@ -113,11 +133,9 @@ github.com/gonum/stat
 github.com/google/wire
 # github.com/googleapis/gax-go v2.0.2+incompatible
 github.com/googleapis/gax-go
-# github.com/gorilla/mux v1.7.3
+# github.com/gorilla/mux v1.7.4
 github.com/gorilla/mux
-# github.com/hashicorp/golang-lru v0.5.1
-github.com/hashicorp/golang-lru/simplelru
-# github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
+# github.com/jmespath/go-jmespath v0.3.0
 github.com/jmespath/go-jmespath
 # github.com/jtacoma/uritemplates v1.0.0
 github.com/jtacoma/uritemplates
@@ -131,17 +149,17 @@ github.com/neocortical/noborders
 github.com/nfnt/resize
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 github.com/patrickmn/go-cache
+# github.com/sfomuseum/go-flags v0.0.4
+github.com/sfomuseum/go-flags
 # github.com/whosonfirst/algnhsa v0.1.0
 github.com/whosonfirst/algnhsa
 # github.com/whosonfirst/go-sanitize v0.1.0
 github.com/whosonfirst/go-sanitize
-# github.com/whosonfirst/go-whosonfirst-cli v0.1.0
-github.com/whosonfirst/go-whosonfirst-cli/flags
 # github.com/whosonfirst/go-whosonfirst-csv v0.1.0
 github.com/whosonfirst/go-whosonfirst-csv
 # github.com/whosonfirst/go-whosonfirst-log v0.1.0
 github.com/whosonfirst/go-whosonfirst-log
-# go.opencensus.io v0.22.0
+# go.opencensus.io v0.22.2
 go.opencensus.io/stats
 go.opencensus.io/stats/view
 go.opencensus.io/tag
@@ -157,9 +175,8 @@ go.opencensus.io/internal
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/tracestate
 go.opencensus.io
-# gocloud.dev v0.18.0
+# gocloud.dev v0.19.0
 gocloud.dev/blob
-gocloud.dev/blob/fileblob
 gocloud.dev/blob/memblob
 gocloud.dev/blob/s3blob
 gocloud.dev/blob/driver
@@ -167,10 +184,10 @@ gocloud.dev/gcerrors
 gocloud.dev/internal/gcerr
 gocloud.dev/internal/oc
 gocloud.dev/internal/openurl
-gocloud.dev/internal/escape
 gocloud.dev/aws
+gocloud.dev/internal/escape
 gocloud.dev/internal/retry
-# golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8
+# golang.org/x/image v0.0.0-20200119044424-58c23975cae1
 golang.org/x/image/tiff
 golang.org/x/image/webp
 golang.org/x/image/math/fixed
@@ -183,14 +200,14 @@ golang.org/x/image/draw
 golang.org/x/image/font
 golang.org/x/image/font/basicfont
 golang.org/x/image/math/f64
-# golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+# golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 golang.org/x/net/trace
 golang.org/x/net/internal/timeseries
 golang.org/x/net/http2
 golang.org/x/net/http2/hpack
 golang.org/x/net/http/httpguts
 golang.org/x/net/idna
-# golang.org/x/sys v0.0.0-20190620070143-6f217b454f45
+# golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/secure/bidirule
@@ -200,7 +217,7 @@ golang.org/x/text/transform
 # golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
-# google.golang.org/genproto v0.0.0-20190620144150-6af8c5fc6601
+# google.golang.org/genproto v0.0.0-20190801165951-fa694d86fc64
 google.golang.org/genproto/googleapis/rpc/status
 # google.golang.org/grpc v1.21.1
 google.golang.org/grpc/codes

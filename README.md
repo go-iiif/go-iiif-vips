@@ -16,7 +16,7 @@ package main
 import (
 	"context"
 	_ "github.com/go-iiif/go-iiif-vips"
-	"github.com/go-iiif/go-iiif/tools"
+	"github.com/go-iiif/go-iiif/v3/tools"
 )
 
 func main() {

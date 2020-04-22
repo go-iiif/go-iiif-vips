@@ -37,11 +37,12 @@ func (dr *IdSecretURIDriver) NewURI(str_uri string) (URI, error) {
 type IdSecretURI struct {
 	URI
 	origin   string
-	id       int64
+	id       uint64
 	secret   string
 	secret_o string
 	label    string
 	format   string
+	prefix   string
 }
 
 func NewIdSecretURIFromDSN(dsn_raw string) (URI, error) {
@@ -98,7 +99,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 		return nil, errors.New("Missing id")
 	}
 
-	id, err := strconv.ParseInt(str_id, 10, 64)
+	id, err := strconv.ParseUint(str_id, 10, 64)
 
 	if err != nil {
 		return nil, err
@@ -108,6 +109,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 	secret_o := q.Get("secret_o")
 	label := q.Get("label")
 	format := q.Get("format")
+	prefix := q.Get("prefix")
 
 	rnd_opts := random.DefaultOptions()
 	rnd_opts.AlphaNumeric = true
@@ -141,6 +143,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 		secret_o: secret_o,
 		label:    label,
 		format:   format,
+		prefix:   prefix,
 	}
 
 	return &id_u, nil
@@ -152,9 +155,13 @@ func (u *IdSecretURI) Driver() string {
 
 func (u *IdSecretURI) Target(opts *url.Values) (string, error) {
 
-	str_id := strconv.FormatInt(u.id, 10)
+	str_id := strconv.FormatUint(u.id, 10)
 
-	root := id2Path(u.id)
+	prefix := id2Path(u.id)
+
+	if u.prefix != "" {
+		prefix = u.prefix
+	}
 
 	secret := u.secret
 	format := u.format
@@ -180,7 +187,7 @@ func (u *IdSecretURI) Target(opts *url.Values) (string, error) {
 	}
 
 	fname := fmt.Sprintf("%s_%s_%s.%s", str_id, secret, label, format)
-	uri := filepath.Join(root, fname)
+	uri := filepath.Join(prefix, fname)
 
 	return uri, nil
 }
@@ -192,7 +199,7 @@ func (u *IdSecretURI) Origin() string {
 func (u *IdSecretURI) String() string {
 
 	q := url.Values{}
-	q.Set("id", strconv.FormatInt(u.id, 10))
+	q.Set("id", strconv.FormatUint(u.id, 10))
 	q.Set("secret", u.secret)
 	q.Set("secret_o", u.secret_o)
 
@@ -200,10 +207,10 @@ func (u *IdSecretURI) String() string {
 	return NewIdSecretURIString(raw_uri)
 }
 
-func id2Path(id int64) string {
+func id2Path(id uint64) string {
 
 	parts := []string{""}
-	input := strconv.FormatInt(id, 10)
+	input := strconv.FormatUint(id, 10)
 
 	for len(input) > 3 {
 
