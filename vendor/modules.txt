@@ -176,16 +176,17 @@ go.opencensus.io/trace/internal
 go.opencensus.io/trace/tracestate
 go.opencensus.io
 # gocloud.dev v0.19.0
+gocloud.dev/blob/fileblob
 gocloud.dev/blob
 gocloud.dev/blob/memblob
 gocloud.dev/blob/s3blob
 gocloud.dev/blob/driver
 gocloud.dev/gcerrors
+gocloud.dev/internal/escape
 gocloud.dev/internal/gcerr
 gocloud.dev/internal/oc
 gocloud.dev/internal/openurl
 gocloud.dev/aws
-gocloud.dev/internal/escape
 gocloud.dev/internal/retry
 # golang.org/x/image v0.0.0-20200119044424-58c23975cae1
 golang.org/x/image/tiff
