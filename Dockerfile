@@ -2,7 +2,7 @@
 # https://github.com/felixbuenemann/vips-alpine/blob/master/Dockerfile
 # https://github.com/mikestead/docker-imaginary-alpine/blob/master/Dockerfile
 
-FROM golang:1.12-alpine as builder
+FROM golang:1.24-alpine as builder
 
 ARG VIPS_VERSION=8.8.3
 

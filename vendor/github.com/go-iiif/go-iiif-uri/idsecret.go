@@ -1,43 +1,22 @@
 package uri
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"github.com/aaronland/go-string/dsn"
-	"github.com/aaronland/go-string/random"
-	_ "log"
 	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/aaronland/go-string/random"
 )
 
-const IdSecretDriverName string = "idsecret"
-
-func init() {
-	dr := NewIdSecretURIDriver()
-	RegisterDriver(IdSecretDriverName, dr)
-}
-
-type IdSecretURIDriver struct {
-	Driver
-}
-
-func NewIdSecretURIDriver() Driver {
-
-	dr := IdSecretURIDriver{}
-	return &dr
-}
-
-func (dr *IdSecretURIDriver) NewURI(str_uri string) (URI, error) {
-
-	return NewIdSecretURI(str_uri)
-}
+const IDSECRET_SCHEME string = "idsecret"
 
 type IdSecretURI struct {
 	URI
 	origin   string
-	id       uint64
+	id       string
 	secret   string
 	secret_o string
 	label    string
@@ -45,39 +24,12 @@ type IdSecretURI struct {
 	prefix   string
 }
 
-func NewIdSecretURIFromDSN(dsn_raw string) (URI, error) {
-
-	dsn_map, err := dsn.StringToDSNWithKeys(dsn_raw, "id", "uri")
-
-	if err != nil {
-		return nil, err
-	}
-
-	origin := dsn_map["id"]
-	id := dsn_map["uri"]
-
-	q := url.Values{}
-	q.Set("id", id)
-
-	secret, ok := dsn_map["secret"]
-
-	if ok {
-		q.Set("secret", secret)
-	}
-
-	secret_o, ok := dsn_map["secret_o"]
-
-	if ok {
-		q.Set("secret_o", secret_o)
-	}
-
-	raw_uri := fmt.Sprintf("%s?%s", origin, q.Encode())
-	str_uri := NewIdSecretURIString(raw_uri)
-
-	return NewIdSecretURI(str_uri)
+func init() {
+	ctx := context.Background()
+	RegisterURI(ctx, IDSECRET_SCHEME, NewIdSecretURI)
 }
 
-func NewIdSecretURI(str_uri string) (URI, error) {
+func NewIdSecretURI(ctx context.Context, str_uri string) (URI, error) {
 
 	u, err := url.Parse(str_uri)
 
@@ -88,7 +40,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 	origin := strings.TrimLeft(u.Path, "/")
 
 	if origin == "" {
-		return nil, errors.New("Invalid path")
+		return nil, fmt.Errorf("Invalid path, '%s' resolves to nil origin after trimming", str_uri)
 	}
 
 	q := u.Query()
@@ -96,13 +48,16 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 	str_id := q.Get("id")
 
 	if str_id == "" {
-		return nil, errors.New("Missing id")
+		return nil, fmt.Errorf("Missing ?id= parameter")
 	}
 
-	id, err := strconv.ParseUint(str_id, 10, 64)
+	if q.Get("ensure-int") != "" {
 
-	if err != nil {
-		return nil, err
+		_, err := strconv.ParseUint(str_id, 10, 64)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to resolve integer value for ?id= parameter, %w", err)
+		}
 	}
 
 	secret := q.Get("secret")
@@ -119,7 +74,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 		s, err := random.String(rnd_opts)
 
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("Failed to derive new secret, %w", err)
 		}
 
 		secret = s
@@ -130,7 +85,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 		s, err := random.String(rnd_opts)
 
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("Failed to derive new original secret, %w", err)
 		}
 
 		secret_o = s
@@ -138,7 +93,7 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 
 	id_u := IdSecretURI{
 		origin:   origin,
-		id:       id,
+		id:       str_id,
 		secret:   secret,
 		secret_o: secret_o,
 		label:    label,
@@ -149,15 +104,11 @@ func NewIdSecretURI(str_uri string) (URI, error) {
 	return &id_u, nil
 }
 
-func (u *IdSecretURI) Driver() string {
-	return IdSecretDriverName
-}
-
 func (u *IdSecretURI) Target(opts *url.Values) (string, error) {
 
-	str_id := strconv.FormatUint(u.id, 10)
+	str_id := u.id // strconv.FormatUint(u.id, 10)
 
-	prefix := id2Path(u.id)
+	prefix := Id2Path(u.id)
 
 	if u.prefix != "" {
 		prefix = u.prefix
@@ -179,11 +130,11 @@ func (u *IdSecretURI) Target(opts *url.Values) (string, error) {
 	}
 
 	if format == "" {
-		return "", errors.New("Missing format parameter")
+		return "", fmt.Errorf("Missing format parameter")
 	}
 
 	if label == "" {
-		return "", errors.New("Missing label parameter")
+		return "", fmt.Errorf("Missing label parameter")
 	}
 
 	fname := fmt.Sprintf("%s_%s_%s.%s", str_id, secret, label, format)
@@ -199,18 +150,23 @@ func (u *IdSecretURI) Origin() string {
 func (u *IdSecretURI) String() string {
 
 	q := url.Values{}
-	q.Set("id", strconv.FormatUint(u.id, 10))
+	q.Set("id", u.id) // strconv.FormatUint(u.id, 10))
 	q.Set("secret", u.secret)
 	q.Set("secret_o", u.secret_o)
 
 	raw_uri := fmt.Sprintf("%s?%s", u.origin, q.Encode())
-	return NewIdSecretURIString(raw_uri)
+
+	return fmt.Sprintf("%s:///%s", u.Scheme(), raw_uri)
 }
 
-func id2Path(id uint64) string {
+func (u *IdSecretURI) Scheme() string {
+	return IDSECRET_SCHEME
+}
+
+func Id2Path(id string) string {
 
 	parts := []string{""}
-	input := strconv.FormatUint(id, 10)
+	input := id // strconv.FormatUint(id, 10)
 
 	for len(input) > 3 {
 
@@ -224,8 +180,4 @@ func id2Path(id uint64) string {
 	}
 
 	return filepath.Join(parts...)
-}
-
-func NewIdSecretURIString(raw_uri string) string {
-	return fmt.Sprintf("%s:///%s", IdSecretDriverName, raw_uri)
 }

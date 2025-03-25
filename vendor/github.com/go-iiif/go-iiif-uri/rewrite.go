@@ -1,17 +1,13 @@
 package uri
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"net/url"
 	"strings"
 )
 
-const RewriteDriverName string = "rewrite"
-
-type RewriteURIDriver struct {
-	Driver
-}
+const REWRITE_SCHEME string = "rewrite"
 
 type RewriteURI struct {
 	URI
@@ -20,21 +16,11 @@ type RewriteURI struct {
 }
 
 func init() {
-	dr := NewRewriteURIDriver()
-	RegisterDriver(RewriteDriverName, dr)
+	ctx := context.Background()
+	RegisterURI(ctx, REWRITE_SCHEME, NewRewriteURI)
 }
 
-func NewRewriteURIDriver() Driver {
-
-	dr := RewriteURIDriver{}
-	return &dr
-}
-
-func (dr *RewriteURIDriver) NewURI(str_uri string) (URI, error) {
-	return NewRewriteURI(str_uri)
-}
-
-func NewRewriteURI(str_uri string) (URI, error) {
+func NewRewriteURI(ctx context.Context, str_uri string) (URI, error) {
 
 	u, err := url.Parse(str_uri)
 
@@ -45,7 +31,7 @@ func NewRewriteURI(str_uri string) (URI, error) {
 	origin := strings.TrimLeft(u.Path, "/")
 
 	if origin == "" {
-		return nil, errors.New("Invalid path")
+		return nil, fmt.Errorf("Invalid path, '%s' resolves to nil origin after trimming", str_uri)
 	}
 
 	q := u.Query()
@@ -53,11 +39,11 @@ func NewRewriteURI(str_uri string) (URI, error) {
 	target := q.Get("target")
 
 	if target == "" {
-		return nil, errors.New("Missing rewrite target")
+		return nil, fmt.Errorf("Missing rewrite target")
 	}
 
 	if target == origin {
-		return nil, errors.New("Invalid rewrite target")
+		return nil, fmt.Errorf("Invalid rewrite target")
 	}
 
 	rw := RewriteURI{
@@ -66,10 +52,6 @@ func NewRewriteURI(str_uri string) (URI, error) {
 	}
 
 	return &rw, nil
-}
-
-func (u *RewriteURI) Driver() string {
-	return RewriteDriverName
 }
 
 func (u *RewriteURI) Origin() string {
@@ -86,9 +68,9 @@ func (u *RewriteURI) String() string {
 	q.Set("target", u.target)
 
 	raw_uri := fmt.Sprintf("%s?%s", u.origin, q.Encode())
-	return NewRewriteURIString(raw_uri)
+	return fmt.Sprintf("rewrite:///%s", raw_uri)
 }
 
-func NewRewriteURIString(raw_uri string) string {
-	return fmt.Sprintf("%s:///%s", RewriteDriverName, raw_uri)
+func (u *RewriteURI) Scheme() string {
+	return REWRITE_SCHEME
 }

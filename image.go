@@ -10,9 +10,9 @@ import (
 	"image"
 	"image/gif"
 
-	iiifconfig "github.com/go-iiif/go-iiif/v6/config"
-	iiifimage "github.com/go-iiif/go-iiif/v6/image"
-	iiifsource "github.com/go-iiif/go-iiif/v6/source"
+	iiifconfig "github.com/go-iiif/go-iiif/v7/config"
+	iiifimage "github.com/go-iiif/go-iiif/v7/image"
+	iiifsource "github.com/go-iiif/go-iiif/v7/source"
 	"github.com/h2non/bimg"
 )
 

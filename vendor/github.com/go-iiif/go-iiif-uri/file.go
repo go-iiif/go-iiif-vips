@@ -1,17 +1,13 @@
 package uri
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"net/url"
 	"strings"
 )
 
-const FileDriverName string = "file"
-
-type FileURIDriver struct {
-	Driver
-}
+const FILE_SCHEME string = "file"
 
 type FileURI struct {
 	URI
@@ -20,21 +16,11 @@ type FileURI struct {
 }
 
 func init() {
-	dr := NewFileURIDriver()
-	RegisterDriver(FileDriverName, dr)
+	ctx := context.Background()
+	RegisterURI(ctx, FILE_SCHEME, NewFileURI)
 }
 
-func NewFileURIDriver() Driver {
-
-	dr := FileURIDriver{}
-	return &dr
-}
-
-func (dr *FileURIDriver) NewURI(str_uri string) (URI, error) {
-	return NewFileURI(str_uri)
-}
-
-func NewFileURI(str_uri string) (URI, error) {
+func NewFileURI(ctx context.Context, str_uri string) (URI, error) {
 
 	u, err := url.Parse(str_uri)
 
@@ -45,7 +31,7 @@ func NewFileURI(str_uri string) (URI, error) {
 	origin := strings.TrimLeft(u.Path, "/")
 
 	if origin == "" {
-		return nil, errors.New("Invalid path")
+		return nil, fmt.Errorf("Invalid path, '%s' resolves to nil origin after trimming", str_uri)
 	}
 
 	q := u.Query()
@@ -62,10 +48,6 @@ func NewFileURI(str_uri string) (URI, error) {
 	}
 
 	return &f_u, nil
-}
-
-func (u *FileURI) Driver() string {
-	return FileDriverName
 }
 
 func (u *FileURI) Origin() string {
@@ -86,9 +68,9 @@ func (u *FileURI) String() string {
 		raw_uri = fmt.Sprintf("%s?%s", raw_uri, q.Encode())
 	}
 
-	return NewFileURIString(raw_uri)
+	return fmt.Sprintf("file:///%s", raw_uri)
 }
 
-func NewFileURIString(str_uri string) string {
-	return fmt.Sprintf("%s:///%s", FileDriverName, str_uri)
+func (u *FileURI) Scheme() string {
+	return FILE_SCHEME
 }
