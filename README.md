@@ -4,7 +4,13 @@
 
 ## Important
 
-You should start by reading the documentation in the [go-iiif](https://github.com/go-iiif/go-iiif/blob/master/README.md) package.
+You should start by reading the documentation in the [go-iiif](https://github.com/go-iiif/go-iiif/blob/main/README.md) package.
+
+## This package is out of sync with `go-iiif/go-iiif/v7`
+
+The current version of `go-iiif` is "v7". There is a [v7 branch](https://github.com/go-iiif/go-iiif-vips/tree/v7) for this package but it is blocked on build issues with the [h2non/bimg](https://github.com/h2non/bimg/) depedency. There is also an [open issue](https://github.com/go-iiif/go-iiif-vips/issues/2) to use the [davidbyttow/govips](https://github.com/davidbyttow/govips) package instead.
+
+There is no timeline for when these issues will be addressed. Any help would be welcome.
 
 ## Tools
 
