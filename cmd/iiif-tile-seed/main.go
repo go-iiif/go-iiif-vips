@@ -1,26 +1,22 @@
 package main
 
 import (
-      _ "github.com/aaronland/go-cloud-s3blob"
-      _ "gocloud.dev/blob/fileblob"
-)
-
-import (
 	"context"
-	_ "github.com/go-iiif/go-iiif-vips"
-	"github.com/go-iiif/go-iiif/v3/tools"
 	"log"
+
+	_ "github.com/aaronland/gocloud-blob/s3"
+	_ "github.com/go-iiif/go-iiif-vips/v7"
+	_ "gocloud.dev/blob/fileblob"
+	_ "gocloud.dev/blob/memblob"
+	_ "gocloud.dev/blob/s3blob"
+
+	"github.com/go-iiif/go-iiif/v6/app/seed"
 )
 
 func main() {
 
-	tool, err := tools.NewTileSeedTool()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = tool.Run(context.Background())
+	ctx := context.Background()
+	err = seed.Run(ctx)
 
 	if err != nil {
 		log.Fatal(err)

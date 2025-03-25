@@ -7,13 +7,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	iiifconfig "github.com/go-iiif/go-iiif/v3/config"
-	iiifimage "github.com/go-iiif/go-iiif/v3/image"
-	iiifsource "github.com/go-iiif/go-iiif/v3/source"
-	"gopkg.in/h2non/bimg.v1"
 	"image"
 	"image/gif"
-	_ "log"
+
+	iiifconfig "github.com/go-iiif/go-iiif/v6/config"
+	iiifimage "github.com/go-iiif/go-iiif/v6/image"
+	iiifsource "github.com/go-iiif/go-iiif/v6/source"
+	"github.com/h2non/bimg"
 )
 
 type VIPSImage struct {

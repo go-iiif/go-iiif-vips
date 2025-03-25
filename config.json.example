@@ -16,7 +16,7 @@
         ]
     },
     "graphics": {
-	"source": { "name": "VIPS" }
+	"driver": "vip://"
     },
     "features": {
 	"enable": {
@@ -35,10 +35,10 @@
 	}
     },
     "images": {
-	"source": { "name": "Disk", "path": "example/images" },
-	"cache": { "name": "Memory", "ttl": 300, "limit": 100 }
+	"source": { "uri": "file://example/images" },
+	"cache": { "uri": "memory://" }
     },
     "derivatives": {
-	"cache": { "name": "Disk", "path": "example/cache" }
+	"cache": { "uri": "memory://"" }
     }
 }

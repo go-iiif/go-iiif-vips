@@ -1,13 +1,14 @@
 package vips
 
 import (
-	iiifcache "github.com/go-iiif/go-iiif/v3/cache"
-	iiifconfig "github.com/go-iiif/go-iiif/v3/config"
-	iiifdriver "github.com/go-iiif/go-iiif/v3/driver"
-	iiifimage "github.com/go-iiif/go-iiif/v3/image"
-	iiifsource "github.com/go-iiif/go-iiif/v3/source"
-	"gopkg.in/h2non/bimg.v1"
-	_ "log"
+	"context"
+
+	iiifcache "github.com/go-iiif/go-iiif/v6/cache"
+	iiifconfig "github.com/go-iiif/go-iiif/v6/config"
+	iiifdriver "github.com/go-iiif/go-iiif/v6/driver"
+	iiifimage "github.com/go-iiif/go-iiif/v6/image"
+	iiifsource "github.com/go-iiif/go-iiif/v6/source"
+	"github.com/h2non/bimg"
 )
 
 func init() {
@@ -25,12 +26,12 @@ type VIPSDriver struct {
 	iiifdriver.Driver
 }
 
-func NewVIPSDriver() (iiifdriver.Driver, error) {
+func NewVIPSDriver(ctx context.Context, uri string) (iiifdriver.Driver, error) {
 	dr := &VIPSDriver{}
 	return dr, nil
 }
 
-func (dr *VIPSDriver) NewImageFromConfigWithSource(config *iiifconfig.Config, src iiifsource.Source, id string) (iiifimage.Image, error) {
+func (dr *VIPSDriver) NewImageFromConfigWithSource(ctx context.Context, config *iiifconfig.Config, src iiifsource.Source, id string) (iiifimage.Image, error) {
 
 	body, err := src.Read(id)
 
@@ -66,7 +67,7 @@ func (dr *VIPSDriver) NewImageFromConfigWithSource(config *iiifconfig.Config, sr
 	return &im, nil
 }
 
-func (dr *VIPSDriver) NewImageFromConfigWithCache(config *iiifconfig.Config, cache iiifcache.Cache, id string) (iiifimage.Image, error) {
+func (dr *VIPSDriver) NewImageFromConfigWithCache(ctx context.Context, config *iiifconfig.Config, cache iiifcache.Cache, id string) (iiifimage.Image, error) {
 
 	var image iiifimage.Image
 
@@ -80,7 +81,7 @@ func (dr *VIPSDriver) NewImageFromConfigWithCache(config *iiifconfig.Config, cac
 			return nil, err
 		}
 
-		image, err = dr.NewImageFromConfigWithSource(config, source, id)
+		image, err = dr.NewImageFromConfigWithSource(ctx, config, source, id)
 
 		if err != nil {
 			return nil, err
@@ -88,7 +89,7 @@ func (dr *VIPSDriver) NewImageFromConfigWithCache(config *iiifconfig.Config, cac
 
 	} else {
 
-		image, err = dr.NewImageFromConfig(config, id)
+		image, err = dr.NewImageFromConfig(ctx, config, id)
 
 		if err != nil {
 			return nil, err
@@ -102,9 +103,9 @@ func (dr *VIPSDriver) NewImageFromConfigWithCache(config *iiifconfig.Config, cac
 	return image, nil
 }
 
-func (dr *VIPSDriver) NewImageFromConfig(config *iiifconfig.Config, id string) (iiifimage.Image, error) {
+func (dr *VIPSDriver) NewImageFromConfig(ctx context.Context, config *iiifconfig.Config, id string) (iiifimage.Image, error) {
 
-	source, err := iiifsource.NewSourceFromConfig(config)
+	source, err := iiifsource.NewSource(ctx, config.Images.Source.URI)
 
 	if err != nil {
 		return nil, err
